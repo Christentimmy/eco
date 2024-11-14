@@ -1,4 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/password_recovery_screen.dart';
+import 'package:eco/pages/verify_phone_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -197,6 +199,24 @@ class SignUpScreen extends StatelessWidget {
             ontap: () {},
             text: "Login",
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () => Get.to(() => const PasswordRecoveryScreen()),
+                child: const Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           const Spacer(),
           const Text(
             "By clicking start, you agree to our Terms and Conditions",
@@ -230,7 +250,6 @@ class SignUpScreen extends StatelessWidget {
           const EmailTextField(),
           const SizedBox(height: 10),
           Container(
-            // height: 52,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -277,7 +296,9 @@ class SignUpScreen extends StatelessWidget {
           const ConfirmPassswordTextField(),
           const SizedBox(height: 25),
           CommonButton(
-            ontap: () {},
+            ontap: () {
+              Get.to(() => VerifyPhoneNumberScreen());
+            },
             text: "Sign Up",
           ),
           const Spacer(),
@@ -291,6 +312,7 @@ class SignUpScreen extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class PhoneNumberTextField extends StatelessWidget {
@@ -402,13 +424,13 @@ class CommonButton extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               AppColors.primaryColor,
-              const Color.fromARGB(255, 58, 58, 58),
+              const Color.fromARGB(255, 17, 99, 14),
             ],
           ),
         ),
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
             color: Colors.white,

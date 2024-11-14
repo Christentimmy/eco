@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/bank_details_screen.dart';
 import 'package:eco/pages/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,12 +54,12 @@ class CreateProfileScreen extends StatelessWidget {
             topRight: Radius.circular(20),
             topLeft: Radius.circular(20),
           ),
-          color: Color.fromARGB(255, 34, 34, 34),
+          color: Color.fromARGB(255, 22, 22, 22),
         ),
         child: CommonButton(
           text: "Continue",
           ontap: () {
-            Get.to(()=> CreateProfileScreen());
+            Get.to(() => const BankDetailsScreen());
           },
         ),
       ),
@@ -203,6 +204,7 @@ class CreateProfileScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CustomTextField extends StatelessWidget {
   final String hintText;
   IconData? suffixIcon;

@@ -1,11 +1,12 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/personal_document_screen.dart';
+import 'package:eco/pages/set_up_finger_screen.dart';
 import 'package:eco/pages/sign_up_screen.dart';
-import 'package:eco/pages/vehicle_document_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PersonalDocumentScreen extends StatelessWidget {
-  const PersonalDocumentScreen({super.key});
+class VehichleDocumentScreen2 extends StatelessWidget {
+  const VehichleDocumentScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +26,13 @@ class PersonalDocumentScreen extends StatelessWidget {
         child: CommonButton(
           text: "Next",
           ontap: () {
-            Get.to(()=> VehicleDocumentScreen());
+            Get.to(() => const SetUpFingerScreen());
           },
         ),
       ),
       appBar: AppBar(
         title: const Text(
-          "Personal Document",
+          "Vehicle Document",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -50,32 +51,31 @@ class PersonalDocumentScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 15,
+          horizontal: 15,
+          vertical: 20,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: Get.height / 8.5),
+            SizedBox(height: Get.height / 12.5),
             const PersonDocumentCard(
-              firstText: "Birth Certificate",
-              secondText: "Vehicle Registration",
+              firstText: "Rc Book",
+              secondText: "Vehicle registration",
             ),
             const SizedBox(height: 15),
-             const PersonDocumentCard(
-              firstText: "Driving License",
+            const PersonDocumentCard(
+              firstText: "INSURANCE POLICY",
               secondText: "A driving license is an official Id",
             ),
             const SizedBox(height: 15),
-             const PersonDocumentCard(
-              firstText: "Passport",
-              secondText: "A passport is a travel document  ",
+            const PersonDocumentCard(
+              firstText: "OWNER CERTIFICATE",
+              secondText: "A passport is a travel document",
             ),
             const SizedBox(height: 15),
-            // CustomTextField(hintText: "Swift/FSC code"),
             const PersonDocumentCard(
-              firstText: "Election Card",
-              secondText: "Vote regitration card",
+              firstText: "PUC",
+              secondText: "Incorrect document type",
             ),
             const SizedBox(height: 25),
             Center(
@@ -86,6 +86,9 @@ class PersonalDocumentScreen extends StatelessWidget {
                     const TextSpan(
                       text:
                           "By continuing, I confirm that I have read & agree to the\n",
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
                     ),
                     TextSpan(
                       text: "Terms & conditions",
@@ -95,78 +98,22 @@ class PersonalDocumentScreen extends StatelessWidget {
                     ),
                     const TextSpan(
                       text: " and ",
+                      style: TextStyle(
+                        color: Colors.grey,
+                      )
                     ),
                     TextSpan(
-                        text: "Privacy policy",
-                        style: TextStyle(
-                          color: AppColors.primaryColor,
-                        )),
+                      text: "Privacy policy",
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
                   ],
                 ),
               ),
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class PersonDocumentCard extends StatelessWidget {
-  final String firstText;
-  final String secondText;
-  const PersonDocumentCard({
-    super.key,
-    required this.firstText,
-    required this.secondText,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          width: 2,
-          color: AppColors.primaryColor,
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                firstText,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                secondText,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 10,
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Text(
-            "Upload",
-            style: TextStyle(
-              color: AppColors.primaryColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          )
-        ],
       ),
     );
   }

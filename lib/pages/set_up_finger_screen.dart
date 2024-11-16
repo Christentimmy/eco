@@ -1,7 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/my_ride_list_screen.dart';
+import 'package:eco/pages/bottom_navigation_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SetUpFingerScreen extends StatelessWidget {
@@ -45,11 +44,16 @@ class SetUpFingerScreen extends StatelessWidget {
                       backgroundColor: Colors.black,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
+                          horizontal: 15,
+                          vertical: 45,
+                        ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SvgPicture.asset("assets/images/rec1.svg"),
+                            Image.asset(
+                              "assets/images/authPic.png",
+                              width: 150,
+                            ),
                             const Text(
                               "Your account is ready to use. You will be redirected to the home page in a few seconds",
                               textAlign: TextAlign.center,
@@ -107,7 +111,7 @@ class SetUpFingerScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(()=> MyRideListScreen());
+                    Get.to(() => BottomNavigationScreen());
                   },
                   child: Container(
                     height: 45,

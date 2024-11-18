@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class ChatMenuScreen extends StatelessWidget {
   ChatMenuScreen({super.key});
 
-  List _issues = [
+  final List _issues = [
     'Accepted trip by accident',
     "Problem with pickup route",
     "Made a wrong turn",

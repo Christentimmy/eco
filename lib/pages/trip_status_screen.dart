@@ -6,7 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class TripStatusScreen extends StatelessWidget {
-  const TripStatusScreen({super.key});
+  TripStatusScreen({super.key});
+
+  RxBool _isTripStart = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -214,18 +216,21 @@ class TripStatusScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // CommonButton(text: "Accept", ontap: () {
-                  //   Get.to(()=> ArrivingPickUpScreen());
-                  // }),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: CommonButton(
-                          text: "Pause",
-                          bgColor: Colors.white,
-                          textColor: Colors.black,
-                          ontap: () {},
+                      Obx(
+                        () => Expanded(
+                          child: CommonButton(
+                            text: _isTripStart.value ? "Pause" : "Resume",
+                            bgColor: _isTripStart.value
+                                ? Colors.white
+                                : AppColors.primaryColor,
+                            textColor: Colors.black,
+                            ontap: () {
+                              _isTripStart.value = !_isTripStart.value;
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -235,7 +240,7 @@ class TripStatusScreen extends StatelessWidget {
                           bgColor: Colors.red,
                           textColor: Colors.black,
                           ontap: () {
-                            Get.to(()=> ReviewScreen());
+                            Get.to(() => ReviewScreen());
                           },
                         ),
                       ),

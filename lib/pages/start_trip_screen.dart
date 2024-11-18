@@ -1,4 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/arriving_pick_up_screen.dart';
 import 'package:eco/pages/sign_up_screen.dart';
 import 'package:eco/pages/trip_status_screen.dart';
 import 'package:flutter/material.dart';
@@ -59,28 +60,33 @@ class StartTripScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
                 children: [
-                  Container(
-                    height: 45,
-                    width: 100,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(
-                          Icons.navigation_rounded,
-                          color: Colors.white,
-                        ),
-                        Text(
-                          "Navigate",
-                          style: TextStyle(
+                  GestureDetector(
+                    onTap: (){
+                      displaySafetyKit(context);
+                    },
+                    child: Container(
+                      height: 45,
+                      width: 100,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.navigation_rounded,
                             color: Colors.white,
-                            fontSize: 12,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "Navigate",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const Spacer(),

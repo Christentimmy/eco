@@ -114,8 +114,8 @@ class ListCardDetailsScreen extends StatelessWidget {
                       ),
                       const Spacer(),
                       GestureDetector(
-                        onTap: (){
-                          Get.to(()=> ChatScreen());
+                        onTap: () {
+                          Get.to(() => ChatScreen());
                         },
                         child: Container(
                           height: 45,
@@ -142,7 +142,7 @@ class ListCardDetailsScreen extends StatelessWidget {
                           color: Colors.redAccent,
                         ),
                         child: const Icon(
-                          Icons.message,
+                          Icons.call,
                           color: Colors.white,
                         ),
                       ),
@@ -220,9 +220,12 @@ class ListCardDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  CommonButton(text: "Accept", ontap: () {
-                    Get.to(()=> ArrivingPickUpScreen());
-                  }),
+                  CommonButton(
+                    text: "Accept",
+                    ontap: () {
+                      Get.to(() => const ArrivingPickUpScreen());
+                    },
+                  ),
                 ],
               ),
             ),

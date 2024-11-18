@@ -149,6 +149,10 @@ class ReviewScreen extends StatelessWidget {
                     ),
                     child: TextFormField(
                       maxLines: 3,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                       decoration: const InputDecoration(
                         hintText: "Comment here",
                         hintStyle: TextStyle(
@@ -165,9 +169,11 @@ class ReviewScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  CommonButton(text: "Submit", ontap: () {
-                    Get.offAll(()=>  BottomNavigationScreen());
-                  }),
+                  CommonButton(
+                      text: "Submit",
+                      ontap: () {
+                        Get.offAll(() => BottomNavigationScreen());
+                      }),
                 ],
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/sign_up_screen.dart';
 import 'package:eco/pages/start_trip_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class ArrivingPickUpScreen extends StatelessWidget {
@@ -59,28 +60,33 @@ class ArrivingPickUpScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
                 children: [
-                  Container(
-                    height: 45,
-                    width: 100,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(
-                          Icons.navigation_rounded,
-                          color: Colors.white,
-                        ),
-                        Text(
-                          "Navigate",
-                          style: TextStyle(
+                  GestureDetector(
+                    onTap: () {
+                      displaySafetyKit(context);
+                    },
+                    child: Container(
+                      height: 45,
+                      width: 100,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.navigation_rounded,
                             color: Colors.white,
-                            fontSize: 12,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "Navigate",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const Spacer(),
@@ -178,8 +184,8 @@ class ArrivingPickUpScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 14),
-                        Icon(Icons.star, color: Colors.yellow),
-                        Text(
+                        const Icon(Icons.star, color: Colors.yellow),
+                        const Text(
                           "5(38)",
                           style: TextStyle(
                             color: Colors.white,
@@ -190,11 +196,12 @@ class ArrivingPickUpScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
                     child: CommonButton(
                       text: "Arriving Pick Up",
                       ontap: () {
-                        Get.to(()=> StartTripScreen());
+                        Get.to(() => const StartTripScreen());
                       },
                     ),
                   ),
@@ -206,4 +213,114 @@ class ArrivingPickUpScreen extends StatelessWidget {
       ),
     );
   }
+
+ 
 }
+
+
+ Future<dynamic> displaySafetyKit(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: Get.height * 0.459,
+          width: Get.width,
+          decoration: const BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                topLeft: Radius.circular(20),
+              )),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Text(
+                "Safety ToolKit",
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Divider(),
+              const SizedBox(height: 10),
+              ListTile(
+                leading: const Icon(
+                  Icons.location_searching_rounded,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  "Follow my ride",
+                  style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.account_circle,
+                  color: Colors.white,
+                ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Proof of trip status",
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Text(
+                      "Show law enforcement your current trip status",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.taxi_alert_outlined,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  "Report a crash",
+                  style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const ListTile(
+                leading: Icon(
+                  Icons.notification_important_rounded,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  "911 Assistance",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }

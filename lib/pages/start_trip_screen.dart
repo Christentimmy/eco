@@ -1,11 +1,11 @@
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/sign_up_screen.dart';
-import 'package:eco/pages/start_trip_screen.dart';
+import 'package:eco/pages/trip_status_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ArrivingPickUpScreen extends StatelessWidget {
-  const ArrivingPickUpScreen({super.key});
+class StartTripScreen extends StatelessWidget {
+  const StartTripScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,8 @@ class ArrivingPickUpScreen extends StatelessWidget {
             ),
             const Spacer(),
             Container(
-              height: 210,
+              height: 320,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Colors.black,
@@ -113,90 +114,103 @@ class ArrivingPickUpScreen extends StatelessWidget {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 45,
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25),
-                      ),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.notifications_active),
-                        Text(
-                          "Rider Notified",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                  const SizedBox(height: 10),
+                  const Text(
+                    '1:35 Late',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      '2 mins',
-                      style: TextStyle(
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
                         color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                    ),
-                    child: Text(
-                      "B Street 92025, CA - 3:00 to 3:15 PM",
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Clara Smith",
-                          style: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Pickup Location",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          Text(
+                            "SJC, Terminal B",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  Divider(color: AppColors.primaryColor),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Drop Off Location",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "SJC, Terminal B",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 50,
+                      alignment: Alignment.center,
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          width: 2,
+                          color: AppColors.primaryColor,
                         ),
-                        const SizedBox(width: 14),
-                        Icon(Icons.star, color: Colors.yellow),
-                        Text(
-                          "5(38)",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
+                      ),
+                      child: const Text(
+                        "Cancel Ride",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    child: CommonButton(
-                      text: "Arriving Pick Up",
-                      ontap: () {
-                        Get.to(()=> StartTripScreen());
-                      },
-                    ),
+                  const SizedBox(height: 5),
+                  CommonButton(
+                    text: "Start Trip",
+                    ontap: () {
+                      Get.to(()=> TripStatusScreen());
+                    },
                   ),
                 ],
               ),

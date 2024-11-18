@@ -1,13 +1,12 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/arriving_pick_up_screen.dart';
-import 'package:eco/pages/chat_screen.dart';
+import 'package:eco/pages/review_screen.dart';
 import 'package:eco/pages/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class ListCardDetailsScreen extends StatelessWidget {
-  const ListCardDetailsScreen({super.key});
+class TripStatusScreen extends StatelessWidget {
+  const TripStatusScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -113,23 +112,18 @@ class ListCardDetailsScreen extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      GestureDetector(
-                        onTap: (){
-                          Get.to(()=> ChatScreen());
-                        },
-                        child: Container(
-                          height: 45,
-                          width: 45,
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: AppColors.primaryColor,
-                          ),
-                          child: const Icon(
-                            Icons.message,
-                            color: Colors.white,
-                          ),
+                      Container(
+                        height: 45,
+                        width: 45,
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: AppColors.primaryColor,
+                        ),
+                        child: const Icon(
+                          Icons.message,
+                          color: Colors.white,
                         ),
                       ),
                       Container(
@@ -220,9 +214,33 @@ class ListCardDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  CommonButton(text: "Accept", ontap: () {
-                    Get.to(()=> ArrivingPickUpScreen());
-                  }),
+                  // CommonButton(text: "Accept", ontap: () {
+                  //   Get.to(()=> ArrivingPickUpScreen());
+                  // }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CommonButton(
+                          text: "Pause",
+                          bgColor: Colors.white,
+                          textColor: Colors.black,
+                          ontap: () {},
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CommonButton(
+                          text: "End Strip",
+                          bgColor: Colors.red,
+                          textColor: Colors.black,
+                          ontap: () {
+                            Get.to(()=> ReviewScreen());
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

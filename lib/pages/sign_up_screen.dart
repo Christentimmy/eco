@@ -400,13 +400,18 @@ class VectorDiagram extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CommonButton extends StatelessWidget {
   final String text;
+  Color? bgColor;
+  Color? textColor;
   final VoidCallback ontap;
-  const CommonButton({
+  CommonButton({
     super.key,
     required this.text,
+    this.bgColor,
     required this.ontap,
+    this.textColor,
   });
 
   @override
@@ -419,21 +424,22 @@ class CommonButton extends StatelessWidget {
         width: Get.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
+          color: bgColor,
+          gradient: bgColor == null ?  LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
               AppColors.primaryColor,
               const Color.fromARGB(255, 17, 99, 14),
             ],
-          ),
+          ) : null,
         ),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 15,
-            color: Colors.white,
+            fontSize: 13,
+            color:  textColor ?? Colors.white,
           ),
         ),
       ),

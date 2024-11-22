@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class TripStatusScreen extends StatelessWidget {
   TripStatusScreen({super.key});
 
-  RxBool _isTripStart = true.obs;
+  final RxBool _isTripStart = true.obs;
 
   @override
   Widget build(BuildContext context) {

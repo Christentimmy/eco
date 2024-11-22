@@ -1,3 +1,4 @@
+import 'package:eco/pages/my_income_screen.dart';
 import 'package:eco/pages/my_ride_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,7 @@ class BottomNavigationScreen extends StatelessWidget {
 
   final _pages = [
     MyRideListScreen(),
-    Container(color: Colors.pink),
+    MyIncomeScreen(),
     Container(color: Colors.blue),
     Container(color: Colors.purple),
   ];

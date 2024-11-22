@@ -200,14 +200,14 @@ class MyIncomeWidget extends StatelessWidget {
             const SizedBox(height: 5),
             const Divider(color: Colors.white),
             const SizedBox(height: 10),
-            Text(
+            const Text(
               "Payment in Moti Express : 2%",
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 12,
               ),
             ),
-            Text(
+            const Text(
               "Payment in Admin : 10%",
               style: TextStyle(
                 color: Colors.grey,

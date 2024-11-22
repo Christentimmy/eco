@@ -2,6 +2,7 @@ import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/bottom_navigation_screen.dart';
 import 'package:eco/pages/my_income_screen.dart';
 import 'package:eco/pages/my_ratings_screen.dart';
+import 'package:eco/pages/pay_screen.dart';
 import 'package:eco/pages/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.transparent,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: MyRatingsScreen(),
+      home: PayScreen(),
     );
   }
 }

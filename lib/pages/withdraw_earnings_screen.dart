@@ -1,4 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/add_card_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -99,19 +100,24 @@ class WithdrawEarningsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.camera_alt_rounded, color: Colors.white),
-                SizedBox(width: 7),
-                Text(
-                  "Scan Card",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+            GestureDetector(
+              onTap: () {
+                Get.to(() => AddCardScreen());
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.camera_alt_rounded, color: Colors.white),
+                  SizedBox(width: 7),
+                  Text(
+                    "Scan Card",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

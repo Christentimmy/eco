@@ -42,6 +42,13 @@ class CreateProfileScreen extends StatelessWidget {
     }
   }
 
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _homeAddressController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _dobController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +66,7 @@ class CreateProfileScreen extends StatelessWidget {
         child: CommonButton(
           text: "Continue",
           ontap: () {
-            Get.to(() => const BankDetailsScreen());
+            Get.to(() => BankDetailsScreen());
           },
         ),
       ),
@@ -127,9 +134,9 @@ class CreateProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: Get.height * 0.05),
-            CustomTextField(hintText: "First Name"),
+            CustomTextField(hintText: "First Name", textController: _firstNameController,),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Last Name"),
+            CustomTextField(hintText: "Last Name", textController: _lastNameController,),
             const SizedBox(height: 15),
             Obx(
               () => CustomTextField(
@@ -137,6 +144,7 @@ class CreateProfileScreen extends StatelessWidget {
                     ? DateFormat("MMM dd yyyy").format(_selectedDate.value!)
                     : "Date of birth",
                 suffixIcon: Icons.calendar_month,
+                textController: _dobController,
                 onSuffixClick: () {
                   selectDateOfBirth(context);
                 },
@@ -146,6 +154,7 @@ class CreateProfileScreen extends StatelessWidget {
             CustomTextField(
               hintText: "Email",
               suffixIcon: Icons.email,
+              textController: _emailController,
             ),
             const SizedBox(height: 15),
             Container(
@@ -196,6 +205,7 @@ class CreateProfileScreen extends StatelessWidget {
             CustomTextField(
               hintText: "Home Address",
               suffixIcon: Icons.location_on,
+              textController: _homeAddressController,
             ),
           ],
         ),
@@ -209,16 +219,18 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   IconData? suffixIcon;
   VoidCallback? onSuffixClick;
+  final TextEditingController textController;
   CustomTextField({
     super.key,
     required this.hintText,
     this.suffixIcon,
-    this.onSuffixClick,
+    this.onSuffixClick, required this.textController,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: textController,
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: IconButton(

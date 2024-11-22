@@ -5,7 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class VehicleDocumentScreen extends StatelessWidget {
-  const VehicleDocumentScreen({super.key});
+  VehicleDocumentScreen({super.key});
+
+  final _serviceTypeController = TextEditingController();
+  final _brandController = TextEditingController();
+  final _modelController = TextEditingController();
+  final _manufactureController = TextEditingController();
+  final _numberController = TextEditingController();
+  final _colorController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +64,35 @@ class VehicleDocumentScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: Get.height / 12.5),
-            CustomTextField(hintText: "Service Type"),
+            CustomTextField(
+              hintText: "Service Type",
+              textController: _serviceTypeController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Brand (Auto Suggestion)"),
+            CustomTextField(
+              hintText: "Brand (Auto Suggestion)",
+              textController: _brandController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Model (Auto Suggestion)"),
+            CustomTextField(
+              hintText: "Model (Auto Suggestion)",
+              textController: _modelController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Manufacture (Auto Suggestion)"),
+            CustomTextField(
+              hintText: "Manufacture (Auto Suggestion)",
+              textController: _manufactureController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Number Plate"),
+            CustomTextField(
+              hintText: "Number Plate",
+              textController: _numberController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Color"),
+            CustomTextField(
+              hintText: "Color",
+              textController: _colorController,
+            ),
           ],
         ),
       ),

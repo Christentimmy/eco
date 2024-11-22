@@ -6,7 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BankDetailsScreen extends StatelessWidget {
-  const BankDetailsScreen({super.key});
+  BankDetailsScreen({super.key});
+
+  final _bankNameController = TextEditingController();
+  final _accountHolderController = TextEditingController();
+  final _accountNumberController = TextEditingController();
+  final _swiftController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class BankDetailsScreen extends StatelessWidget {
         child: CommonButton(
           text: "Next",
           ontap: () {
-            Get.to(()=> PersonalDocumentScreen());
+            Get.to(() => PersonalDocumentScreen());
           },
         ),
       ),
@@ -58,13 +63,25 @@ class BankDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: Get.height / 8.5),
-            CustomTextField(hintText: "Bank Name"),
+            CustomTextField(
+              hintText: "Bank Name",
+              textController: _bankNameController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Account Holder Name"),
+            CustomTextField(
+              hintText: "Account Holder Name",
+              textController: _accountHolderController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Account Number"),
+            CustomTextField(
+              hintText: "Account Number",
+              textController: _accountNumberController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Swift/FSC code"),
+            CustomTextField(
+              hintText: "Swift/FSC code",
+              textController: _swiftController,
+            ),
             const SizedBox(height: 25),
             Center(
               child: RichText(
@@ -85,11 +102,10 @@ class BankDetailsScreen extends StatelessWidget {
                       text: " and ",
                     ),
                     TextSpan(
-                      text: "Privacy policy",
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                      )
-                    ),
+                        text: "Privacy policy",
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                        )),
                   ],
                 ),
               ),

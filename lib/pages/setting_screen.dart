@@ -1,4 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,18 +16,12 @@ class SettingScreen extends StatelessWidget {
         title: const Text(
           "Settings",
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 17,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.white,
-          ),
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -38,36 +33,7 @@ class SettingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: Get.height * 0.01),
-              Center(
-                child: Stack(
-                  children: [
-                    const CircleAvatar(
-                      radius: 50,
-                    ),
-                    Positioned(
-                      bottom: 5,
-                      right: 2,
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border: Border.all(
-                            width: 2,
-                            color: Colors.red,
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: 15,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              UserPictureWithButton(),
               const SizedBox(height: 10),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -91,21 +57,42 @@ class SettingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               CustomListTile(
-                  icon: Icons.account_circle_sharp, text: "Profile Settings"),
-              Divider(),
-              CustomListTile(icon: Icons.lock, text: "Password"),
-              Divider(),
-              CustomListTile(
-                  icon: Icons.car_repair_sharp, text: "Vehicle Details"),
-              Divider(),
-              CustomListTile(
-                  icon: Icons.calendar_month_outlined, text: "Date & Distance"),
+                icon: Icons.account_circle_sharp,
+                text: "Profile Settings",
+                onTap: (){
+                  Get.to(()=> ProfileScreen());
+                },
+              ),
               Divider(),
               CustomListTile(
-                  icon: Icons.people_rounded, text: "Refer Friends "),
+                icon: Icons.lock,
+                text: "Password",
+                onTap: (){},
+              ),
               Divider(),
               CustomListTile(
-                  icon: Icons.rule_folder_sharp, text: "Rules & Terms"),
+                icon: Icons.car_repair_sharp,
+                text: "Vehicle Details",
+                onTap: (){},
+              ),
+              Divider(),
+              CustomListTile(
+                icon: Icons.calendar_month_outlined,
+                text: "Date & Distance",
+                onTap: (){},
+              ),
+              Divider(),
+              CustomListTile(
+                icon: Icons.people_rounded,
+                text: "Refer Friends ",
+                onTap: (){},
+              ),
+              Divider(),
+              CustomListTile(
+                icon: Icons.rule_folder_sharp,
+                text: "Rules & Terms",
+                onTap: (){},
+              ),
               Divider(),
               const SizedBox(height: 20),
               Center(
@@ -126,18 +113,60 @@ class SettingScreen extends StatelessWidget {
   }
 }
 
+class UserPictureWithButton extends StatelessWidget {
+  const UserPictureWithButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Stack(
+        children: [
+          const CircleAvatar(
+            radius: 50,
+          ),
+          Positioned(
+            bottom: 5,
+            right: 2,
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(
+                  width: 2,
+                  color: Colors.red,
+                ),
+              ),
+              child: const Icon(
+                Icons.edit,
+                color: Colors.black,
+                size: 15,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CustomListTile extends StatelessWidget {
   final IconData icon;
   final String text;
+  final VoidCallback onTap;
   const CustomListTile({
     super.key,
     required this.icon,
-    required this.text,
+    required this.text, required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       leading: Icon(
         icon,
         color: AppColors.primaryColor,

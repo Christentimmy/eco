@@ -56,7 +56,9 @@ class ResetPasswordScreen extends StatelessWidget {
             children: [
               SizedBox(height: Get.height / 15.5),
               Center(
-                child: SvgPicture.asset("assets/images/rec2.svg"),
+                child: SvgPicture.asset(
+                  "assets/images/rec2.svg",
+                ),
               ),
               const SizedBox(height: 20),
               const Text(

@@ -1,4 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/change_password_screen.dart';
 import 'package:eco/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -67,7 +68,9 @@ class SettingScreen extends StatelessWidget {
               CustomListTile(
                 icon: Icons.lock,
                 text: "Password",
-                onTap: (){},
+                onTap: (){
+                  Get.to(()=> ChangePasswordScreen());
+                },
               ),
               Divider(),
               CustomListTile(

@@ -63,6 +63,7 @@ class MyIncomeScreen extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 10),
           const Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),

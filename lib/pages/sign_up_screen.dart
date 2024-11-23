@@ -1,4 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/bottom_navigation_screen.dart';
 import 'package:eco/pages/password_recovery_screen.dart';
 import 'package:eco/pages/verify_phone_screen.dart';
 import 'package:flutter/material.dart';
@@ -196,7 +197,9 @@ class SignUpScreen extends StatelessWidget {
           const PasswordTextField(),
           const SizedBox(height: 25),
           CommonButton(
-            ontap: () {},
+            ontap: () {
+              Get.to(()=> BottomNavigationScreen());
+            },
             text: "Login",
           ),
           Row(

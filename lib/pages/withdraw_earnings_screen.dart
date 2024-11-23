@@ -80,44 +80,42 @@ class WithdrawEarningsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              decoration: BoxDecoration(
-                border: Border.all(width: 2, color: AppColors.primaryColor),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.payment,
-                    color: AppColors.primaryColor,
-                  ),
-                  const SizedBox(width: 15),
-                  const Text("Add New Bank")
-                ],
+            GestureDetector(
+              onTap: ()=>  Get.to(() => AddCardScreen()),
+              child: Container(
+                height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2, color: AppColors.primaryColor),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.payment,
+                      color: AppColors.primaryColor,
+                    ),
+                    const SizedBox(width: 15),
+                    const Text("Add New Bank")
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 15),
-            GestureDetector(
-              onTap: () {
-                Get.to(() => AddCardScreen());
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.camera_alt_rounded, color: Colors.white),
-                  SizedBox(width: 7),
-                  Text(
-                    "Scan Card",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.camera_alt_rounded, color: Colors.white),
+                SizedBox(width: 7),
+                Text(
+                  "Scan Card",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

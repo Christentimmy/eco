@@ -1,5 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/bottom_navigation_screen.dart';
+import 'package:eco/pages/setting_screen.dart';
 import 'package:eco/pages/sign_up_screen.dart';
 import 'package:eco/pages/withdraw_earnings_screen.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.transparent,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: WithdrawEarningsScreen(),
+      home: SplashScreen(),
     );
   }
 }

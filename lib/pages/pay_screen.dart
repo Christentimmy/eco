@@ -1,5 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/sign_up_screen.dart';
+import 'package:eco/pages/withdraw_earnings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -106,7 +107,9 @@ class PayScreen extends StatelessWidget {
             const SizedBox(height: 40),
             CommonButton(
               text: "Withdraw",
-              ontap: () {},
+              ontap: () {
+                Get.to(()=> WithdrawEarningsScreen());
+              },
             ),
           ],
         ),

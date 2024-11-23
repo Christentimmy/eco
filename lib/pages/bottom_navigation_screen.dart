@@ -1,5 +1,8 @@
 import 'package:eco/pages/my_income_screen.dart';
+import 'package:eco/pages/my_ratings_screen.dart';
 import 'package:eco/pages/my_ride_list_screen.dart';
+import 'package:eco/pages/pay_screen.dart';
+import 'package:eco/pages/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,8 +14,10 @@ class BottomNavigationScreen extends StatelessWidget {
   final _pages = [
     MyRideListScreen(),
     MyIncomeScreen(),
-    Container(color: Colors.blue),
-    Container(color: Colors.purple),
+    MyRatingsScreen(),
+    PayScreen(),
+    SettingScreen(),
+    // Container(color: Colors.purple),
   ];
 
   @override
@@ -55,6 +60,10 @@ class BottomNavigationScreen extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.payment),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
                 label: "",
               ),
             ],

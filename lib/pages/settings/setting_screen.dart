@@ -1,5 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/settings/change_password_screen.dart';
+import 'package:eco/pages/settings/faq_screen.dart';
 import 'package:eco/pages/settings/profile_screen.dart';
 import 'package:eco/pages/settings/vehicle_profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +80,14 @@ class SettingScreen extends StatelessWidget {
                 text: "Vehicle Details",
                 onTap: (){
                   Get.to(()=> VehicleProfileScreen());
+                },
+              ),
+              Divider(),
+              CustomListTile(
+                icon: Icons.calendar_month_outlined,
+                text: "FAQ",
+                onTap: (){
+                  Get.to(()=> FaqScreen());
                 },
               ),
               Divider(),

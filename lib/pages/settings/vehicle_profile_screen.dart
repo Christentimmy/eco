@@ -1,5 +1,3 @@
-import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/auth/personal_document_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,28 +34,28 @@ class VehicleProfileScreen extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const VehicleProfileCard(
+          children: const [
+             VehicleProfileCard(
               firstText: "Service Type",
               secondText: "Micro",
             ),
-            const VehicleProfileCard(
+             VehicleProfileCard(
               firstText: "Brand (Auto Suggestion)",
               secondText: "BMW",
             ),
-            const VehicleProfileCard(
+             VehicleProfileCard(
               firstText: "Model (Auto Suggestion)",
               secondText: "M4",
             ),
-            const VehicleProfileCard(
+             VehicleProfileCard(
               firstText: "Manufacture (Auto Suggestion)",
               secondText: "BMW",
             ),
-            const VehicleProfileCard(
+             VehicleProfileCard(
               firstText: "Number Plate",
               secondText: "YT1234",
             ),
-            const VehicleProfileCard(
+             VehicleProfileCard(
               firstText: "Color",
               secondText: "Blue",
             ),

@@ -2,7 +2,6 @@ import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/bottom_navigation_screen.dart';
 import 'package:eco/pages/settings/setting_screen.dart';
 import 'package:eco/pages/auth/sign_up_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';

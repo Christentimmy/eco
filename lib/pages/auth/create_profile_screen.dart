@@ -48,7 +48,6 @@ class CreateProfileScreen extends StatelessWidget {
   final _emailController = TextEditingController();
   final _dobController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,9 +133,15 @@ class CreateProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: Get.height * 0.05),
-            CustomTextField(hintText: "First Name", textController: _firstNameController,),
+            CustomTextField(
+              hintText: "First Name",
+              textController: _firstNameController,
+            ),
             const SizedBox(height: 15),
-            CustomTextField(hintText: "Last Name", textController: _lastNameController,),
+            CustomTextField(
+              hintText: "Last Name",
+              textController: _lastNameController,
+            ),
             const SizedBox(height: 15),
             Obx(
               () => CustomTextField(
@@ -218,13 +223,16 @@ class CreateProfileScreen extends StatelessWidget {
 class CustomTextField extends StatelessWidget {
   final String hintText;
   IconData? suffixIcon;
+  IconData? prefixIcon;
   VoidCallback? onSuffixClick;
   final TextEditingController textController;
   CustomTextField({
     super.key,
     required this.hintText,
     this.suffixIcon,
-    this.onSuffixClick, required this.textController,
+    this.prefixIcon,
+    this.onSuffixClick,
+    required this.textController,
   });
 
   @override
@@ -233,6 +241,10 @@ class CustomTextField extends StatelessWidget {
       controller: textController,
       decoration: InputDecoration(
         hintText: hintText,
+        prefixIcon: Icon(
+          prefixIcon,
+          color: Colors.grey,
+        ),
         suffixIcon: IconButton(
           onPressed: onSuffixClick,
           icon: Icon(

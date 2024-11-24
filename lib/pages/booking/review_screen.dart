@@ -1,6 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/bottom_navigation_screen.dart';
-import 'package:eco/pages/sign_up_screen.dart';
+import 'package:eco/pages/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:flutter_svg/svg.dart';
@@ -170,10 +170,11 @@ class ReviewScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CommonButton(
-                      text: "Submit",
-                      ontap: () {
-                        Get.offAll(() => BottomNavigationScreen());
-                      }),
+                    text: "Submit",
+                    ontap: () {
+                      Get.offAll(() => BottomNavigationScreen());
+                    },
+                  ),
                 ],
               ),
             ),

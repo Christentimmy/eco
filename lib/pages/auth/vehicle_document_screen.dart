@@ -1,6 +1,6 @@
-import 'package:eco/pages/create_profile_screen.dart';
-import 'package:eco/pages/sign_up_screen.dart';
-import 'package:eco/pages/vehichle_document_screen_2.dart';
+import 'package:eco/pages/auth/create_profile_screen.dart';
+import 'package:eco/pages/auth/sign_up_screen.dart';
+import 'package:eco/pages/auth/vehicle_document_screen_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

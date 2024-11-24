@@ -1,4 +1,4 @@
-import 'package:eco/pages/create_profile_screen.dart';
+import 'package:eco/pages/auth/create_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -49,12 +49,12 @@ class ChangePasswordScreen extends StatelessWidget {
             const SizedBox(height: 20),
             CustomTextField(
               hintText: "New Password",
-              textController: _currentPassword,
+              textController: _newPassword,
             ),
             const SizedBox(height: 20),
             CustomTextField(
               hintText: "Confirm Password",
-              textController: _currentPassword,
+              textController: _confirmPassword,
             ),
           ],
         ),

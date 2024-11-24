@@ -1,5 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/reset_password_screen.dart';
+import 'package:eco/pages/auth/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';

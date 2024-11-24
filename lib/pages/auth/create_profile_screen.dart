@@ -1,7 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/bank_details_screen.dart';
-import 'package:eco/pages/sign_up_screen.dart';
+import 'package:eco/pages/auth/bank_details_screen.dart';
+import 'package:eco/pages/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';

@@ -1,8 +1,8 @@
-import 'package:eco/pages/my_income_screen.dart';
-import 'package:eco/pages/my_ratings_screen.dart';
-import 'package:eco/pages/my_ride_list_screen.dart';
-import 'package:eco/pages/pay_screen.dart';
-import 'package:eco/pages/setting_screen.dart';
+import 'package:eco/pages/home/my_income_screen.dart';
+import 'package:eco/pages/home/my_ratings_screen.dart';
+import 'package:eco/pages/home/my_ride_list_screen.dart';
+import 'package:eco/pages/home/pay_screen.dart';
+import 'package:eco/pages/settings/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

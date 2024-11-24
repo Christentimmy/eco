@@ -1,8 +1,7 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/sign_up_screen.dart';
-import 'package:eco/pages/start_trip_screen.dart';
+import 'package:eco/pages/auth/sign_up_screen.dart';
+import 'package:eco/pages/booking/start_trip_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class ArrivingPickUpScreen extends StatelessWidget {
@@ -197,7 +196,9 @@ class ArrivingPickUpScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
+                      horizontal: 15,
+                      vertical: 15,
+                    ),
                     child: CommonButton(
                       text: "Arriving Pick Up",
                       ontap: () {
@@ -213,114 +214,111 @@ class ArrivingPickUpScreen extends StatelessWidget {
       ),
     );
   }
-
- 
 }
 
-
- Future<dynamic> displaySafetyKit(BuildContext context) {
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: Get.height * 0.459,
-          width: Get.width,
-          decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20),
-              )),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 20,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Text(
-                "Safety ToolKit",
+Future<dynamic> displaySafetyKit(BuildContext context) {
+  return showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return Container(
+        height: Get.height * 0.459,
+        width: Get.width,
+        decoration: const BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+            )),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 20,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            Text(
+              "Safety ToolKit",
+              style: TextStyle(
+                color: AppColors.primaryColor,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Divider(),
+            const SizedBox(height: 10),
+            ListTile(
+              leading: const Icon(
+                Icons.location_searching_rounded,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Follow my ride",
                 style: TextStyle(
                   color: AppColors.primaryColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const Divider(),
-              const SizedBox(height: 10),
-              ListTile(
-                leading: const Icon(
-                  Icons.location_searching_rounded,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  "Follow my ride",
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.account_circle,
+                color: Colors.white,
               ),
-              ListTile(
-                leading: const Icon(
-                  Icons.account_circle,
-                  color: Colors.white,
-                ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Proof of trip status",
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Proof of trip status",
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const Text(
-                      "Show law enforcement your current trip status",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.taxi_alert_outlined,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  "Report a crash",
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
                   ),
+                  const Text(
+                    "Show law enforcement your current trip status",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.taxi_alert_outlined,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Report a crash",
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const ListTile(
-                leading: Icon(
-                  Icons.notification_important_rounded,
+            ),
+            const ListTile(
+              leading: Icon(
+                Icons.notification_important_rounded,
+                color: Colors.red,
+              ),
+              title: Text(
+                "911 Assistance",
+                style: TextStyle(
                   color: Colors.red,
-                ),
-                title: Text(
-                  "911 Assistance",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}

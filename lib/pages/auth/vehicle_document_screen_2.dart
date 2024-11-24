@@ -1,17 +1,12 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/create_profile_screen.dart';
-import 'package:eco/pages/personal_document_screen.dart';
-import 'package:eco/pages/sign_up_screen.dart';
+import 'package:eco/pages/auth/personal_document_screen.dart';
+import 'package:eco/pages/auth/set_up_finger_screen.dart';
+import 'package:eco/pages/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BankDetailsScreen extends StatelessWidget {
-  BankDetailsScreen({super.key});
-
-  final _bankNameController = TextEditingController();
-  final _accountHolderController = TextEditingController();
-  final _accountNumberController = TextEditingController();
-  final _swiftController = TextEditingController();
+class VehichleDocumentScreen2 extends StatelessWidget {
+  const VehichleDocumentScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +26,13 @@ class BankDetailsScreen extends StatelessWidget {
         child: CommonButton(
           text: "Next",
           ontap: () {
-            Get.to(() => PersonalDocumentScreen());
+            Get.to(() => const SetUpFingerScreen());
           },
         ),
       ),
       appBar: AppBar(
         title: const Text(
-          "Bank Details",
+          "Vehicle Document",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -56,31 +51,31 @@ class BankDetailsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 15,
+          horizontal: 15,
+          vertical: 20,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: Get.height / 8.5),
-            CustomTextField(
-              hintText: "Bank Name",
-              textController: _bankNameController,
+            SizedBox(height: Get.height / 12.5),
+            const PersonDocumentCard(
+              firstText: "Rc Book",
+              secondText: "Vehicle registration",
             ),
             const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Account Holder Name",
-              textController: _accountHolderController,
+            const PersonDocumentCard(
+              firstText: "INSURANCE POLICY",
+              secondText: "A driving license is an official Id",
             ),
             const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Account Number",
-              textController: _accountNumberController,
+            const PersonDocumentCard(
+              firstText: "OWNER CERTIFICATE",
+              secondText: "A passport is a travel document",
             ),
             const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Swift/FSC code",
-              textController: _swiftController,
+            const PersonDocumentCard(
+              firstText: "PUC",
+              secondText: "Incorrect document type",
             ),
             const SizedBox(height: 25),
             Center(
@@ -91,6 +86,9 @@ class BankDetailsScreen extends StatelessWidget {
                     const TextSpan(
                       text:
                           "By continuing, I confirm that I have read & agree to the\n",
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
                     ),
                     TextSpan(
                       text: "Terms & conditions",
@@ -100,12 +98,16 @@ class BankDetailsScreen extends StatelessWidget {
                     ),
                     const TextSpan(
                       text: " and ",
+                      style: TextStyle(
+                        color: Colors.grey,
+                      )
                     ),
                     TextSpan(
-                        text: "Privacy policy",
-                        style: TextStyle(
-                          color: AppColors.primaryColor,
-                        )),
+                      text: "Privacy policy",
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
                   ],
                 ),
               ),

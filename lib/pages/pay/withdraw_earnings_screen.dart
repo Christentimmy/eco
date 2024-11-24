@@ -1,5 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/add_card_screen.dart';
+import 'package:eco/pages/pay/add_card_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

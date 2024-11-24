@@ -1,6 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/controller/timer_controller.dart';
-import 'package:eco/pages/create_profile_screen.dart';
+import 'package:eco/pages/auth/create_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';

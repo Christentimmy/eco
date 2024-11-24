@@ -1,12 +1,13 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/arriving_pick_up_screen.dart';
-import 'package:eco/pages/sign_up_screen.dart';
-import 'package:eco/pages/trip_status_screen.dart';
+import 'package:eco/pages/booking/arriving_pick_up_screen.dart';
+import 'package:eco/pages/chat/chat_screen.dart';
+import 'package:eco/pages/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class StartTripScreen extends StatelessWidget {
-  const StartTripScreen({super.key});
+class ListCardDetailsScreen extends StatelessWidget {
+  const ListCardDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,62 +56,11 @@ class StartTripScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: Get.height / 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      displaySafetyKit(context);
-                    },
-                    child: Container(
-                      height: 45,
-                      width: 100,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.navigation_rounded,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            "Navigate",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    height: 35,
-                    width: 35,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Icon(
-                      Icons.notifications_active,
-                      size: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             const Spacer(),
             Container(
-              height: 320,
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              height: 340,
               width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               decoration: const BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.only(
@@ -122,16 +72,83 @@ class StartTripScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 10),
-                  const Text(
-                    '1:35 Late',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: SvgPicture.asset(
+                          "assets/images/placeholder.svg",
+                          width: 40,
+                          height: 40,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Joe Dough",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.star,
+                                color: Colors.yellowAccent,
+                                size: 12,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                "5 (38)",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => ChatScreen());
+                        },
+                        child: Container(
+                          height: 45,
+                          width: 45,
+                          margin: const EdgeInsets.symmetric(horizontal: 15),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: AppColors.primaryColor,
+                          ),
+                          child: const Icon(
+                            Icons.message,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 45,
+                        width: 45,
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.redAccent,
+                        ),
+                        child: const Icon(
+                          Icons.call,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       const Icon(
@@ -187,35 +204,26 @@ class StartTripScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 50,
-                      alignment: Alignment.center,
-                      width: Get.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          width: 2,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                      child: const Text(
-                        "Cancel Ride",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Price: \$5,000.00",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const Text(
+                    "Trip duration: 32 minutes",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   CommonButton(
-                    text: "Start Trip",
+                    text: "Accept",
                     ontap: () {
-                      Get.to(()=> TripStatusScreen());
+                      Get.to(() => const ArrivingPickUpScreen());
                     },
                   ),
                 ],

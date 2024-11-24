@@ -1,5 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
-import 'package:eco/pages/my_income_widget_full_details.dart';
+import 'package:eco/pages/home/my_income_widget_full_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

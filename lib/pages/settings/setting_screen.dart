@@ -3,6 +3,7 @@ import 'package:eco/pages/settings/change_password_screen.dart';
 import 'package:eco/pages/settings/date_distance_screen.dart';
 import 'package:eco/pages/settings/faq_screen.dart';
 import 'package:eco/pages/settings/profile_screen.dart';
+import 'package:eco/pages/settings/rule_terms_screen.dart';
 import 'package:eco/pages/settings/vehicle_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -109,7 +110,9 @@ class SettingScreen extends StatelessWidget {
               CustomListTile(
                 icon: Icons.rule_folder_sharp,
                 text: "Rules & Terms",
-                onTap: (){},
+                onTap: (){
+                  Get.to(()=> RuleAndTermsScreen());
+                },
               ),
               Divider(),
               const SizedBox(height: 20),

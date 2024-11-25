@@ -1,4 +1,5 @@
 import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/pages/settings/license_screen.dart';
 import 'package:eco/pages/settings/privacy_policy_screen.dart';
 import 'package:eco/pages/settings/terms_condition_screen.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +42,8 @@ class RuleAndTermsScreen extends StatelessWidget {
           children: [
             SizedBox(height: Get.height * 0.05),
             ListTile(
-              onTap: (){
-                Get.to(()=> TermsAndConditionScreen());
+              onTap: () {
+                Get.to(() => TermsAndConditionScreen());
               },
               title: Text(
                 "Terms & Conditions",
@@ -56,8 +57,8 @@ class RuleAndTermsScreen extends StatelessWidget {
               ),
             ),
             ListTile(
-              onTap: (){
-                Get.to(()=> PrivacyPolicyScreen());
+              onTap: () {
+                Get.to(() => PrivacyPolicyScreen());
               },
               title: Text(
                 "Privacy & Policy",
@@ -71,6 +72,9 @@ class RuleAndTermsScreen extends StatelessWidget {
               ),
             ),
             ListTile(
+              onTap: () {
+                Get.to(() => LicenseScreen());
+              },
               title: Text(
                 "Licenses",
                 style: TextStyle(

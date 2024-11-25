@@ -64,65 +64,165 @@ class SettingScreen extends StatelessWidget {
               CustomListTile(
                 icon: Icons.account_circle_sharp,
                 text: "Profile Settings",
-                onTap: (){
-                  Get.to(()=> ProfileScreen());
+                onTap: () {
+                  Get.to(() => ProfileScreen());
                 },
               ),
               Divider(),
               CustomListTile(
                 icon: Icons.lock,
                 text: "Password",
-                onTap: (){
-                  Get.to(()=> ChangePasswordScreen());
+                onTap: () {
+                  Get.to(() => ChangePasswordScreen());
                 },
               ),
               Divider(),
               CustomListTile(
                 icon: Icons.car_repair_sharp,
                 text: "Vehicle Details",
-                onTap: (){
-                  Get.to(()=> VehicleProfileScreen());
+                onTap: () {
+                  Get.to(() => VehicleProfileScreen());
                 },
               ),
               Divider(),
               CustomListTile(
                 icon: Icons.calendar_month_outlined,
                 text: "FAQ",
-                onTap: (){
-                  Get.to(()=> FaqScreen());
+                onTap: () {
+                  Get.to(() => FaqScreen());
                 },
               ),
               Divider(),
               CustomListTile(
                 icon: Icons.calendar_month_outlined,
                 text: "Date & Distance",
-                onTap: (){
-                  Get.to(()=> DateAndDistanceScreen());
+                onTap: () {
+                  Get.to(() => DateAndDistanceScreen());
                 },
               ),
               Divider(),
               CustomListTile(
                 icon: Icons.people_rounded,
                 text: "Refer Friends ",
-                onTap: (){},
+                onTap: () {},
               ),
               Divider(),
               CustomListTile(
                 icon: Icons.rule_folder_sharp,
                 text: "Rules & Terms",
-                onTap: (){
-                  Get.to(()=> RuleAndTermsScreen());
+                onTap: () {
+                  Get.to(() => RuleAndTermsScreen());
                 },
               ),
               Divider(),
               const SizedBox(height: 20),
               Center(
-                child: Text(
-                  "Delete Account",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      barrierColor: Color.fromARGB(167, 61, 61, 61),
+                      builder: (context) {
+                        return Container(
+                          height: 370,
+                          width: Get.width,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Do you want to delete\nyour account?",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 17,
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                "All data associated with you account will be\nerased within 48 hours.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                "If there are any unresolved issues related to\nyour account we can’t delete it.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              Container(
+                                height: 45,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                width: Get.width,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              Container(
+                                height: 45,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                width: Get.width,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  border: Border.all(
+                                    width: 2,
+                                    color: Colors.white,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    "Delete Account",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               )
@@ -181,7 +281,8 @@ class CustomListTile extends StatelessWidget {
   const CustomListTile({
     super.key,
     required this.icon,
-    required this.text, required this.onTap,
+    required this.text,
+    required this.onTap,
   });
 
   @override

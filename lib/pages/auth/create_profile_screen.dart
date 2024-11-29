@@ -1,10 +1,14 @@
+import 'dart:typed_data';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/auth/bank_details_screen.dart';
 import 'package:eco/pages/auth/sign_up_screen.dart';
+import 'package:eco/utils/image_picker.dart';
+import 'package:eco/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class CreateProfileScreen extends StatelessWidget {
@@ -48,6 +52,15 @@ class CreateProfileScreen extends StatelessWidget {
   final _emailController = TextEditingController();
   final _dobController = TextEditingController();
 
+  final Rxn<Uint8List> _image = Rxn<Uint8List>();
+
+  void pickImage() async {
+    Uint8List? im = await selectImageFromGallery(ImageSource.gallery);
+    if (im != null) {
+      _image.value = im;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +85,7 @@ class CreateProfileScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text(
-          "Create Your Password",
+          "Create Your Profile",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -99,6 +112,8 @@ class CreateProfileScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
+                    height: 110,
+                    width: 110,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(85),
                       border: Border.all(
@@ -106,10 +121,17 @@ class CreateProfileScreen extends StatelessWidget {
                         color: AppColors.primaryColor,
                       ),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(80),
-                      child: SvgPicture.asset(
-                        "assets/images/placeholder.svg",
+                    child: Obx(
+                      () => ClipRRect(
+                        borderRadius: BorderRadius.circular(80),
+                        child: _image.value != null
+                            ? Image.memory(
+                                _image.value!,
+                                fit: BoxFit.cover,
+                              )
+                            : SvgPicture.asset(
+                                "assets/images/placeholder.svg",
+                              ),
                       ),
                     ),
                   ),
@@ -120,7 +142,9 @@ class CreateProfileScreen extends StatelessWidget {
                       radius: 17,
                       backgroundColor: Colors.grey,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          pickImage();
+                        },
                         icon: Icon(
                           Icons.camera,
                           size: 17,
@@ -213,62 +237,6 @@ class CreateProfileScreen extends StatelessWidget {
               textController: _homeAddressController,
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class CustomTextField extends StatelessWidget {
-  final String hintText;
-  IconData? suffixIcon;
-  IconData? prefixIcon;
-  VoidCallback? onSuffixClick;
-  final TextEditingController textController;
-  CustomTextField({
-    super.key,
-    required this.hintText,
-    this.suffixIcon,
-    this.prefixIcon,
-    this.onSuffixClick,
-    required this.textController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: textController,
-      decoration: InputDecoration(
-        hintText: hintText,
-        prefixIcon: Icon(
-          prefixIcon,
-          color: Colors.grey,
-        ),
-        suffixIcon: IconButton(
-          onPressed: onSuffixClick,
-          icon: Icon(
-            suffixIcon,
-            color: Colors.grey,
-          ),
-        ),
-        hintStyle: const TextStyle(
-          fontSize: 12,
-          color: Color.fromARGB(218, 158, 158, 158),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(
-            width: 2,
-            color: Colors.grey,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(
-            width: 2,
-            color: AppColors.primaryColor,
-          ),
         ),
       ),
     );

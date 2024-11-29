@@ -1,5 +1,6 @@
 import 'package:eco/Resources/color_resources.dart';
 import 'package:eco/pages/bottom_navigation_screen.dart';
+import 'package:eco/pages/settings/refer_friends_screen.dart';
 import 'package:eco/pages/settings/setting_screen.dart';
 import 'package:eco/pages/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +23,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.black,
         splashFactory: NoSplash.splashFactory,
         highlightColor: Colors.transparent,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: SettingScreen(),
+      home: ReferFriendsScreen(),
     );
   }
 }

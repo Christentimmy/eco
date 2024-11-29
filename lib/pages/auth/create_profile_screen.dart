@@ -254,7 +254,7 @@ class CustomTextField extends StatelessWidget {
         ),
         hintStyle: const TextStyle(
           fontSize: 12,
-          color: Color.fromARGB(176, 158, 158, 158),
+          color: Color.fromARGB(218, 158, 158, 158),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),

@@ -45,16 +45,19 @@ class ChangePasswordScreen extends StatelessWidget {
             CustomTextField(
               hintText: "Current Password",
               textController: _currentPassword,
+              prefixIcon: Icons.lock,
             ),
             const SizedBox(height: 20),
             CustomTextField(
               hintText: "New Password",
               textController: _newPassword,
+              prefixIcon: Icons.lock,
             ),
             const SizedBox(height: 20),
             CustomTextField(
               hintText: "Confirm Password",
               textController: _confirmPassword,
+              prefixIcon: Icons.lock,
             ),
           ],
         ),

@@ -1,4 +1,4 @@
-import 'package:eco/pages/splash_screen.dart';
+import 'package:eco/pages/auth/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.transparent,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: SplashScreen(),
+      home: SignUpScreen(),
     );
   }
 }

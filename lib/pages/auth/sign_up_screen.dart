@@ -3,6 +3,7 @@ import 'package:eco/pages/bottom_navigation_screen.dart';
 import 'package:eco/pages/auth/password_recovery_screen.dart';
 import 'package:eco/pages/auth/verify_phone_screen.dart';
 import 'package:eco/widget/custom_button.dart';
+import 'package:eco/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -10,129 +11,264 @@ import 'package:country_code_picker/country_code_picker.dart';
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
 
-  final RxBool _isSignUpPage = true.obs;
-  final RxBool _isSignInpPage = false.obs;
-  final PageController _pageController = PageController();
   final RxBool _isLoginWithNumber = true.obs;
+  final RxInt _currentPage = 0.obs;
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 185, 185, 185),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: Get.height,
-              width: Get.width,
-              child: Stack(
-                children: [
-                  const VectorDiagram(),
-                  Positioned(
-                    bottom: 25,
-                    left: 15,
-                    child: Container(
-                      height: 480,
-                      width: 330,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 10),
-                            Container(
-                              height: 50,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 30,
-                              ),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Row(
-                                children: [
-                                  Obx(
-                                    () => GestureDetector(
-                                      onTap: () {
-                                        _isSignInpPage.value = false;
-                                        _isSignUpPage.value =
-                                            !_isSignUpPage.value;
+      body: Stack(
+        children: [
+          const VectorDiagram(),
+          _buildInputFields(),
+        ],
+      ),
+    );
+  }
 
-                                        if (_isSignUpPage.value) {
-                                          _pageController.animateToPage(
-                                            0,
-                                            duration: const Duration(
-                                              milliseconds: 500,
-                                            ),
-                                            curve: Curves.ease,
-                                          );
-                                        }
-                                      },
-                                      child: Text(
-                                        "Sign Up",
-                                        style: TextStyle(
-                                          color: _isSignUpPage.value
-                                              ? AppColors.primaryColor
-                                              : Colors.white,
-                                          fontWeight: _isSignUpPage.value
-                                              ? FontWeight.bold
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Obx(
-                                    () => GestureDetector(
-                                      onTap: () {
-                                        _isSignUpPage.value = false;
-                                        _isSignInpPage.value =
-                                            !_isSignInpPage.value;
-                                        if (_isSignInpPage.value) {
-                                          _pageController.animateToPage(
-                                            1,
-                                            duration: const Duration(
-                                              milliseconds: 500,
-                                            ),
-                                            curve: Curves.ease,
-                                          );
-                                        }
-                                      },
-                                      child: Text(
-                                        "Sign In",
-                                        style: TextStyle(
-                                          color: _isSignInpPage.value
-                                              ? AppColors.primaryColor
-                                              : Colors.white,
-                                          fontWeight: _isSignInpPage.value
-                                              ? FontWeight.bold
-                                              : null,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 400,
-                              child: PageView(
-                                controller: _pageController,
-                                physics: const NeverScrollableScrollPhysics(),
-                                children: [
-                                  signUpPage(),
-                                  loginPage(),
-                                ],
-                              ),
-                            )
-                          ],
+  SingleChildScrollView _buildInputFields() {
+    return SingleChildScrollView(
+      child: Center(
+        child: Container(
+          height: 480,
+          width: 330,
+          margin: const EdgeInsets.only(top: 300),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              _buildAuthDecision(),
+              _buildCrossFade(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCrossFade() {
+    return Obx(
+      () => AnimatedCrossFade(
+        firstChild: signUpPage(),
+        secondChild: loginPage(),
+        crossFadeState: _currentPage.value == 0
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  Widget _buildAuthDecision() {
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 30,
+      ),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        children: [
+          Obx(
+            () => GestureDetector(
+              onTap: () {
+                CrossFadeState.showFirst;
+                _currentPage.value = 0;
+              },
+              child: Text(
+                "Sign Up",
+                style: TextStyle(
+                  color: _currentPage.value == 0
+                      ? AppColors.primaryColor
+                      : Colors.white,
+                  fontWeight: _currentPage.value == 0 ? FontWeight.bold : null,
+                ),
+              ),
+            ),
+          ),
+          const Spacer(),
+          Obx(
+            () => GestureDetector(
+              onTap: () {
+                CrossFadeState.showSecond;
+                _currentPage.value = 1;
+              },
+              child: Text(
+                "Sign In",
+                style: TextStyle(
+                  color: _currentPage.value == 1
+                      ? AppColors.primaryColor
+                      : Colors.white,
+                  fontWeight: _currentPage.value == 1 ? FontWeight.bold : null,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget loginPage() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
+      child: Container(
+        height: 400,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Text(
+              "Login Into Your Account",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Obx(() {
+                  return GestureDetector(
+                    onTap: () {
+                      _isLoginWithNumber.value = !_isLoginWithNumber.value;
+                    },
+                    child: Text(
+                      _isLoginWithNumber.value
+                          ? "Use Email Instead"
+                          : "Change to number",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+            Obx(() {
+              if (_isLoginWithNumber.value) {
+                return const PhoneNumberTextField();
+              } else {
+                return const EmailTextField();
+              }
+            }),
+            const SizedBox(height: 10),
+            const PasswordTextField(),
+            const SizedBox(height: 25),
+            CommonButton(
+              ontap: () {
+                Get.to(() => BottomNavigationScreen());
+              },
+              text: "Login",
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.to(() => const PasswordRecoveryScreen()),
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            const Text(
+              "By clicking start, you agree to our Terms and Conditions",
+              style: TextStyle(
+                fontSize: 9,
+              ),
+            ),
+            Container(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget signUpPage() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
+      child: Container(
+        height: 400,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            const Text(
+              "Create Account",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const EmailTextField(),
+            // CustomTextField(
+            //   hintText: "name@gmail.com",
+            //   textController: _textController,
+            // ),
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  width: 2,
+                  color: Colors.grey,
+                ),
+              ),
+              child: Row(
+                children: [
+                  CountryCodePicker(
+                    onChanged: (value) {
+                      print(value);
+                    },
+                    initialSelection: '+234',
+                    showCountryOnly: false,
+                    showOnlyCountryWhenClosed: false,
+                    // optional. aligns the flag and the Text left
+                    alignLeft: false,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: "mobile number",
+                        hintStyle: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
@@ -140,181 +276,29 @@ class SignUpScreen extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 10),
+            const PasswordTextField(),
+            const SizedBox(height: 10),
+            const ConfirmPassswordTextField(),
+            const SizedBox(height: 25),
+            CommonButton(
+              ontap: () {
+                Get.to(() => VerifyPhoneNumberScreen());
+              },
+              text: "Sign Up",
+            ),
+            const Spacer(),
+            const Text(
+              "By clicking start, you agree to our Terms and Conditions",
+              style: TextStyle(
+                fontSize: 9,
+              ),
+            )
           ],
         ),
       ),
     );
   }
-
-  Padding loginPage() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          const Text(
-            "Login Into Your Account",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Obx(() {
-                return GestureDetector(
-                  onTap: () {
-                    _isLoginWithNumber.value = !_isLoginWithNumber.value;
-                  },
-                  child: Text(
-                    _isLoginWithNumber.value
-                        ? "Use Email Instead"
-                        : "Change to number",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                );
-              }),
-            ],
-          ),
-          Obx(() {
-            if (_isLoginWithNumber.value) {
-              return const PhoneNumberTextField();
-            } else {
-              return const EmailTextField();
-            }
-          }),
-          const SizedBox(height: 10),
-          const PasswordTextField(),
-          const SizedBox(height: 25),
-          CommonButton(
-            ontap: () {
-              Get.to(()=> BottomNavigationScreen());
-            },
-            text: "Login",
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: () => Get.to(() => const PasswordRecoveryScreen()),
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: Text(
-                    "Forgot Password?",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          const Text(
-            "By clicking start, you agree to our Terms and Conditions",
-            style: TextStyle(
-              fontSize: 9,
-            ),
-          ),
-          Container(),
-        ],
-      ),
-    );
-  }
-  
-  Padding signUpPage() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
-          const Text(
-            "Create Account",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 20),
-          const EmailTextField(),
-          const SizedBox(height: 10),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-                color: Colors.grey,
-              ),
-            ),
-            child: Row(
-              children: [
-                CountryCodePicker(
-                  onChanged: (value) {
-                    print(value);
-                  },
-                  initialSelection: '+234',
-                  showCountryOnly: false,
-                  showOnlyCountryWhenClosed: false,
-                  // optional. aligns the flag and the Text left
-                  alignLeft: false,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: "mobile number",
-                      hintStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          const PasswordTextField(),
-          const SizedBox(height: 10),
-          const ConfirmPassswordTextField(),
-          const SizedBox(height: 25),
-          CommonButton(
-            ontap: () {
-              Get.to(() => VerifyPhoneNumberScreen());
-            },
-            text: "Sign Up",
-          ),
-          const Spacer(),
-          const Text(
-            "By clicking start, you agree to our Terms and Conditions",
-            style: TextStyle(
-              fontSize: 9,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
 }
 
 class PhoneNumberTextField extends StatelessWidget {

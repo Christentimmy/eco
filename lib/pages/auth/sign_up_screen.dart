@@ -1,7 +1,8 @@
-import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/bottom_navigation_screen.dart';
 import 'package:eco/pages/auth/password_recovery_screen.dart';
 import 'package:eco/pages/auth/verify_phone_screen.dart';
+import 'package:eco/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -11,9 +12,7 @@ class SignUpScreen extends StatelessWidget {
 
   final RxBool _isSignUpPage = true.obs;
   final RxBool _isSignInpPage = false.obs;
-
   final PageController _pageController = PageController();
-
   final RxBool _isLoginWithNumber = true.obs;
 
   @override
@@ -232,7 +231,7 @@ class SignUpScreen extends StatelessWidget {
       ),
     );
   }
-
+  
   Padding signUpPage() {
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -398,53 +397,6 @@ class VectorDiagram extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class CommonButton extends StatelessWidget {
-  final String text;
-  Color? bgColor;
-  Color? textColor;
-  final VoidCallback ontap;
-  CommonButton({
-    super.key,
-    required this.text,
-    this.bgColor,
-    required this.ontap,
-    this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: ontap,
-      child: Container(
-        height: 50,
-        alignment: Alignment.center,
-        width: Get.width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: bgColor,
-          gradient: bgColor == null ?  LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.primaryColor,
-              const Color.fromARGB(255, 17, 99, 14),
-            ],
-          ) : null,
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-            color:  textColor ?? Colors.white,
-          ),
-        ),
       ),
     );
   }

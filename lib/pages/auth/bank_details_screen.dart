@@ -1,6 +1,6 @@
-import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/auth/personal_document_screen.dart';
-import 'package:eco/pages/auth/sign_up_screen.dart';
+import 'package:eco/widget/custom_button.dart';
 import 'package:eco/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

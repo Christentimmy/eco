@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/auth/bank_details_screen.dart';
-import 'package:eco/pages/auth/sign_up_screen.dart';
 import 'package:eco/utils/image_picker.dart';
+import 'package:eco/widget/custom_button.dart';
 import 'package:eco/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

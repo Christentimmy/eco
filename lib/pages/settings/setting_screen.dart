@@ -1,4 +1,4 @@
-import 'package:eco/Resources/color_resources.dart';
+import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/settings/change_password_screen.dart';
 import 'package:eco/pages/settings/date_distance_screen.dart';
 import 'package:eco/pages/settings/faq_screen.dart';

@@ -110,6 +110,16 @@ class MyRideListScreen extends StatelessWidget {
               onTap: () {},
             ),
             ListTile(
+              leading: const Icon(Icons.history),
+              title: const Text(
+                'History',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
               leading: const Icon(Icons.message),
               title: const Text(
                 'Inbox',

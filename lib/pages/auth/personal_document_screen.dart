@@ -1,3 +1,4 @@
+import 'package:eco/pages/auth/upload_eac_doc_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/auth/vehicle_document_screen.dart';
 import 'package:eco/widget/custom_button.dart';
@@ -56,24 +57,52 @@ class PersonalDocumentScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: Get.height / 8.5),
-            const PersonDocumentCard(
+            SizedBox(height: Get.height * 0.05),
+            UploadDocCard(
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(
+                    title: "Birth Certificate",
+                  ),
+                );
+              },
               firstText: "Birth Certificate",
               secondText: "Vehicle Registration",
             ),
-            const SizedBox(height: 15),
-            const PersonDocumentCard(
+            SizedBox(height: 15),
+            UploadDocCard(
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(
+                    title: "Driving License",
+                  ),
+                );
+              },
               firstText: "Driving License",
               secondText: "A driving license is an official Id",
             ),
-            const SizedBox(height: 15),
-            const PersonDocumentCard(
+            SizedBox(height: 15),
+            UploadDocCard(
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(
+                    title: "Passport",
+                  ),
+                );
+              },
               firstText: "Passport",
               secondText: "A passport is a travel document  ",
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: 15),
             // CustomTextField(hintText: "Swift/FSC code"),
-            const PersonDocumentCard(
+            UploadDocCard(
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(
+                    title: "Election Card",
+                  ),
+                );
+              },
               firstText: "Election Card",
               secondText: "Vote regitration card",
             ),
@@ -107,6 +136,45 @@ class PersonalDocumentScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class UploadDocCard extends StatelessWidget {
+  final String firstText;
+  final String secondText;
+  final VoidCallback ontap;
+  const UploadDocCard({
+    super.key,
+    required this.firstText,
+    required this.secondText,
+    required this.ontap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: ontap,
+      contentPadding: EdgeInsets.zero,
+      title: Text(
+        firstText,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      subtitle: Text(
+        secondText,
+        style: TextStyle(
+          fontSize: 11,
+          color: Colors.white.withOpacity(0.5),
+        ),
+      ),
+      trailing: Icon(
+        Icons.arrow_forward,
+        color: Colors.white,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:eco/pages/chat/call_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/booking/arriving_pick_up_screen.dart';
 import 'package:eco/pages/chat/chat_screen.dart';
@@ -132,18 +133,21 @@ class ListCardDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        height: 45,
-                        width: 45,
-                        margin: const EdgeInsets.symmetric(horizontal: 15),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.redAccent,
-                        ),
-                        child: const Icon(
-                          Icons.call,
-                          color: Colors.white,
+                      GestureDetector(
+                        onTap: () => Get.to(() => CallScreen()),
+                        child: Container(
+                          height: 45,
+                          width: 45,
+                          margin: const EdgeInsets.symmetric(horizontal: 15),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.redAccent,
+                          ),
+                          child: const Icon(
+                            Icons.call,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],

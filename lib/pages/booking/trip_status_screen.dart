@@ -1,3 +1,5 @@
+import 'package:eco/pages/chat/call_screen.dart';
+import 'package:eco/pages/chat/chat_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/booking/review_screen.dart';
 import 'package:eco/widget/custom_button.dart';
@@ -114,32 +116,42 @@ class TripStatusScreen extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      Container(
-                        height: 45,
-                        width: 45,
-                        margin: const EdgeInsets.symmetric(horizontal: 15),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: AppColors.primaryColor,
-                        ),
-                        child: const Icon(
-                          Icons.message,
-                          color: Colors.white,
+                      GestureDetector(
+                        onTap: (){
+                          Get.to(()=> ChatScreen());
+                        },
+                        child: Container(
+                          height: 45,
+                          width: 45,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: AppColors.primaryColor,
+                          ),
+                          child: const Icon(
+                            Icons.message,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      Container(
-                        height: 45,
-                        width: 45,
-                        margin: const EdgeInsets.symmetric(horizontal: 15),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.redAccent,
-                        ),
-                        child: const Icon(
-                          Icons.message,
-                          color: Colors.white,
+                      GestureDetector(
+                        onTap: (){
+                          Get.to(()=> CallScreen());
+                        },
+                        child: Container(
+                          height: 45,
+                          width: 45,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.redAccent,
+                          ),
+                          child: const Icon(
+                            Icons.call,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],

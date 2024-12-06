@@ -31,6 +31,7 @@ class SetUpFingerScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -86,6 +87,7 @@ class SetUpFingerScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
             ),

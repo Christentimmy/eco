@@ -9,6 +9,8 @@ class CustomTextField extends StatelessWidget {
   IconData? suffixIcon;
   IconData? prefixIcon;
   VoidCallback? onSuffixClick;
+  TextInputType? textInputType;
+  TextStyle? textStyle;
   final TextEditingController textController;
   CustomTextField({
     super.key,
@@ -16,12 +18,16 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.onSuffixClick,
+    this.textInputType,
+    this.textStyle,
     required this.textController,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: textInputType,
+      style: textStyle,
       controller: textController,
       decoration: InputDecoration(
         hintText: hintText,

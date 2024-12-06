@@ -1,3 +1,4 @@
+import 'package:eco/pages/pay/withdraw_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/pay/add_card_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,43 +46,48 @@ class WithdrawEarningsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              height: 50,
-              width: Get.width,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset("assets/images/access.png"),
-                  const SizedBox(width: 10),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Christen Timmy",
-                        style: const TextStyle(
-                          color: Colors.grey,
+            GestureDetector(
+              onTap: () {
+                Get.to(() => WithdrawScreen());
+              },
+              child: Container(
+                height: 50,
+                width: Get.width,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/access.png"),
+                    const SizedBox(width: 10),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Christen Timmy",
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "************45",
-                        style: TextStyle(
-                          fontSize: 9,
+                        Text(
+                          "************45",
+                          style: TextStyle(
+                            fontSize: 9,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: ()=>  Get.to(() => AddCardScreen()),
+              onTap: () => Get.to(() => AddCardScreen()),
               child: Container(
                 height: 50,
                 padding: const EdgeInsets.symmetric(horizontal: 15),

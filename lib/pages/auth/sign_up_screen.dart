@@ -12,7 +12,7 @@ class SignUpScreen extends StatelessWidget {
 
   final RxBool _isLoginWithNumber = true.obs;
   final RxInt _currentPage = 0.obs;
-  final _textController = TextEditingController();
+  // final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +29,12 @@ class SignUpScreen extends StatelessWidget {
 
   SingleChildScrollView _buildInputFields() {
     return SingleChildScrollView(
+      // physics: NeverScrollableScrollPhysics(),
       child: Center(
         child: Container(
-          height: 480,
-          width: 330,
-          margin: const EdgeInsets.only(top: 300),
+          height: Get.height * 0.61,
+          width: Get.width * 0.92,
+          margin: EdgeInsets.only(top: Get.height * 0.35),
           padding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 10,
@@ -214,8 +215,8 @@ class SignUpScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
-      child: Container(
-        height: 400,
+      child: SizedBox(
+        height: Get.height * 0.51,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -245,9 +246,7 @@ class SignUpScreen extends StatelessWidget {
               child: Row(
                 children: [
                   CountryCodePicker(
-                    onChanged: (value) {
-                      print(value);
-                    },
+                    onChanged: (value) {},
                     initialSelection: '+234',
                     showCountryOnly: false,
                     showOnlyCountryWhenClosed: false,
@@ -259,7 +258,7 @@ class SignUpScreen extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         hintText: "mobile number",
-                        hintStyle: const TextStyle(
+                        hintStyle: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),

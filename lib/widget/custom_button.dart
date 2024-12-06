@@ -21,11 +21,11 @@ class CommonButton extends StatelessWidget {
     return GestureDetector(
       onTap: ontap,
       child: Container(
-        height: 50,
+        height: 55,
         alignment: Alignment.center,
         width: Get.width,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           color: bgColor,
           gradient: bgColor == null ?  LinearGradient(
             begin: Alignment.topCenter,

@@ -246,6 +246,9 @@ class UserPictureWithButton extends StatelessWidget {
         children: [
           const CircleAvatar(
             radius: 50,
+            backgroundImage: AssetImage(
+              "assets/images/avater2.png",
+            ),
           ),
           Positioned(
             bottom: 5,

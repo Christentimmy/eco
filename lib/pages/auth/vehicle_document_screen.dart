@@ -18,24 +18,7 @@ class VehicleDocumentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      bottomSheet: Container(
-        height: 120,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-          ),
-          color: Color.fromARGB(255, 22, 22, 22),
-        ),
-        child: CommonButton(
-          text: "Next",
-          ontap: () {
-            Get.to(() => VehichleDocumentScreen2());
-          },
-        ),
-      ),
+      // bottomSheet: _buildBottomSheet(),
       appBar: AppBar(
         title: const Text(
           "Vehicle Document",
@@ -55,46 +38,77 @@ class VehicleDocumentScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 20,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: Get.height / 12.5),
+              CustomTextField(
+                hintText: "Service Type",
+                textController: _serviceTypeController,
+              ),
+              const SizedBox(height: 15),
+              CustomTextField(
+                hintText: "Brand (Auto Suggestion)",
+                textController: _brandController,
+              ),
+              const SizedBox(height: 15),
+              CustomTextField(
+                hintText: "Model (Auto Suggestion)",
+                textController: _modelController,
+              ),
+              const SizedBox(height: 15),
+              CustomTextField(
+                hintText: "Manufacture (Auto Suggestion)",
+                textController: _manufactureController,
+              ),
+              const SizedBox(height: 15),
+              CustomTextField(
+                hintText: "Number Plate",
+                textController: _numberController,
+              ),
+              const SizedBox(height: 15),
+              CustomTextField(
+                hintText: "Color",
+                textController: _colorController,
+              ),
+              const SizedBox(height: 34),
+              CommonButton(
+                text: "Next",
+                ontap: () {
+                  Get.to(() => VehichleDocumentScreen2());
+                },
+              ),
+              const SizedBox(height: 34),
+            ],
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: Get.height / 12.5),
-            CustomTextField(
-              hintText: "Service Type",
-              textController: _serviceTypeController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Brand (Auto Suggestion)",
-              textController: _brandController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Model (Auto Suggestion)",
-              textController: _modelController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Manufacture (Auto Suggestion)",
-              textController: _manufactureController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Number Plate",
-              textController: _numberController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Color",
-              textController: _colorController,
-            ),
-          ],
+      ),
+    );
+  }
+
+  Container _buildBottomSheet() {
+    return Container(
+      height: 120,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20),
+          topLeft: Radius.circular(20),
         ),
+        color: Color.fromARGB(255, 22, 22, 22),
+      ),
+      child: CommonButton(
+        text: "Next",
+        ontap: () {
+          Get.to(() => VehichleDocumentScreen2());
+        },
       ),
     );
   }

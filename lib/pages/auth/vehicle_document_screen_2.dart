@@ -1,3 +1,4 @@
+import 'package:eco/pages/auth/upload_eac_doc_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/auth/personal_document_screen.dart';
 import 'package:eco/pages/auth/set_up_finger_screen.dart';
@@ -57,25 +58,42 @@ class VehichleDocumentScreen2 extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: Get.height / 12.5),
-            const PersonDocumentCard(
+            SizedBox(height: Get.height * 0.05),
+            UploadDocCard(
               firstText: "Rc Book",
               secondText: "Vehicle registration",
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(title: "Vehicle registration"),
+                );
+              },
             ),
-            const SizedBox(height: 15),
-            const PersonDocumentCard(
+            UploadDocCard(
               firstText: "INSURANCE POLICY",
               secondText: "A driving license is an official Id",
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(title: "INSURANCE POLICY"),
+                );
+              },
             ),
-            const SizedBox(height: 15),
-            const PersonDocumentCard(
+            UploadDocCard(
               firstText: "OWNER CERTIFICATE",
               secondText: "A passport is a travel document",
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(title: "OWNER CERTIFICATE"),
+                );
+              },
             ),
-            const SizedBox(height: 15),
-            const PersonDocumentCard(
+            UploadDocCard(
               firstText: "PUC",
               secondText: "Incorrect document type",
+              ontap: () {
+                Get.to(
+                  () => UploadEacDocScreen(title: "PUC"),
+                );
+              },
             ),
             const SizedBox(height: 25),
             Center(
@@ -97,11 +115,10 @@ class VehichleDocumentScreen2 extends StatelessWidget {
                       ),
                     ),
                     const TextSpan(
-                      text: " and ",
-                      style: TextStyle(
-                        color: Colors.grey,
-                      )
-                    ),
+                        text: " and ",
+                        style: TextStyle(
+                          color: Colors.grey,
+                        )),
                     TextSpan(
                       text: "Privacy policy",
                       style: TextStyle(

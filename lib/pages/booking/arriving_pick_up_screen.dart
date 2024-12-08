@@ -1,3 +1,4 @@
+import 'package:eco/pages/home/notification_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/booking/start_trip_screen.dart';
 import 'package:eco/widget/custom_button.dart';
@@ -38,17 +39,22 @@ class ArrivingPickUpScreen extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Container(
-                    height: 35,
-                    width: 35,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Icon(
-                      Icons.notifications_active,
-                      size: 18,
+                  GestureDetector(
+                    onTap: (){
+                      Get.to(()=> NotificationScreen());
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Icon(
+                        Icons.notifications_active,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ],

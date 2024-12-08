@@ -1,7 +1,8 @@
+import 'package:eco/pages/home/request_history_screen.dart';
+import 'package:eco/pages/settings/profile_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/booking/list_card_details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -226,17 +227,21 @@ class MyRideListScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Get.to(()=> ProfileScreen());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.history),
             title: const Text(
-              'History',
+              'Request History',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Get.to(()=> RequestHistoryScreen());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.history),

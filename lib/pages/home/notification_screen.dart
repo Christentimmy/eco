@@ -3,41 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
+  NotificationScreen({super.key});
+
+  final List _notifactionList = [
+    [
+      "System",
+      "Your booking #1234 has been suc...",
+      Icons.done_outline_sharp,
+    ],
+    [
+      "Promotion",
+      "Invite friends - Get 3 coupons each!",
+      Icons.topic,
+    ],
+    [
+      "System",
+      "Your booking #1034 has been suc...",
+      Icons.cancel,
+    ],
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "Notification",
-          style: TextStyle(),
-        ),
-        leading: CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.white,
-          child: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.arrow_back_ios,
-            ),
-          ),
-        ),
-        actions: [
-          CircleAvatar(
-            radius: 15,
-            backgroundColor: AppColors.primaryColor,
-            child: Text(
-              "12",
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.white,
-              ),
-            ),
-          )
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -45,48 +34,89 @@ class NotificationScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Container(
-              height: 55,
-              width: Get.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Color.fromARGB(255, 83, 83, 83),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(255, 196, 196, 196),
-                    blurRadius: 2,
-                    spreadRadius: 1,
-                  )
-                ],
-                border: Border.all(
-                  color: const Color.fromARGB(255, 151, 151, 151),
-                ),
-              ),
-              child: ListTile(
-                title: Text(
-                  "Christen Timmy",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-                subtitle: Text("Your booking #1234 has been suc..."),
-                leading: CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.card_travel),
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 14,
-                  color: Colors.white,
-                ),
+            SizedBox(height: Get.height * 0.05),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _notifactionList.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Color(0xff22272B),
+                      border: Border.all(
+                        color: Color(0xff2D343C),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.white,
+                        child: Icon(_notifactionList[index][2]),
+                      ),
+                      title: Text(
+                        _notifactionList[index][0],
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        _notifactionList[index][1],
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.black,
+      leadingWidth: 40,
+      centerTitle: true,
+      title: Text(
+        "Notification",
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+      ),
+      leading: CircleAvatar(
+        radius: 15,
+        backgroundColor: Colors.white,
+        child: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+          ),
+        ),
+      ),
+      actions: [
+        CircleAvatar(
+          radius: 18,
+          backgroundColor: AppColors.primaryColor,
+          child: Text(
+            "12",
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+      ],
     );
   }
 }

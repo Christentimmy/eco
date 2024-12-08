@@ -1,6 +1,7 @@
+import 'package:eco/pages/bottom_navigation_screen.dart';
+import 'package:eco/pages/home/notification_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/booking/arriving_pick_up_screen.dart';
-import 'package:eco/pages/home/my_ratings_screen.dart';
 import 'package:eco/pages/booking/trip_status_screen.dart';
 import 'package:eco/widget/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -40,17 +41,22 @@ class StartTripScreen extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Container(
-                    height: 35,
-                    width: 35,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Icon(
-                      Icons.notifications_active,
-                      size: 18,
+                  GestureDetector(
+                    onTap: (){
+                      Get.to(()=> NotificationScreen());
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Icon(
+                        Icons.notifications_active,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ],
@@ -191,7 +197,7 @@ class StartTripScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
-                      Get.offAll(()=> MyRatingsScreen());
+                      Get.offAll(()=> BottomNavigationScreen());
                     },
                     child: Container(
                       height: 50,

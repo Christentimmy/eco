@@ -9,6 +9,7 @@ class SetUpFingerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
@@ -31,7 +32,7 @@ class SetUpFingerScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -87,7 +88,7 @@ class SetUpFingerScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
             ),

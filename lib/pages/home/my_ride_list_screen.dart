@@ -1,7 +1,9 @@
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/booking/list_card_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class MyRideListScreen extends StatelessWidget {
@@ -15,144 +17,9 @@ class MyRideListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppColors.primaryColor,
-        child: const Icon(
-          Icons.location_on,
-        ),
-      ),
+      floatingActionButton: _buildFloatingButton(context: context),
       backgroundColor: Colors.black,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 19, 19, 19),
-              ),
-              child: Row(
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(90),
-                    child: SvgPicture.asset(
-                      "assets/images/placeholder.svg",
-                      width: 65,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Jonathon Smith",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                          Text(
-                            "4.8 (5000)",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Builder(
-                    builder: (context) {
-                      return IconButton(
-                        onPressed: () {
-                          Scaffold.of(context).closeDrawer();
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                        ),
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.account_circle),
-              title: const Text(
-                'Profile',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.history),
-              title: const Text(
-                'History',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.history),
-              title: const Text(
-                'History',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.message),
-              title: const Text(
-                'Inbox',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.contact_support_rounded),
-              title: const Text(
-                'FAQ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.contact_support_rounded),
-              title: const Text(
-                'Logout',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: _buildSideBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -280,6 +147,247 @@ class MyRideListScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Drawer _buildSideBar() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 19, 19, 19),
+            ),
+            child: Row(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(90),
+                  child: SvgPicture.asset(
+                    "assets/images/placeholder.svg",
+                    width: 65,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Jonathon Smith",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                        ),
+                        Text(
+                          "4.8 (5000)",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Builder(
+                  builder: (context) {
+                    return IconButton(
+                      onPressed: () {
+                        Scaffold.of(context).closeDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.account_circle),
+            title: const Text(
+              'Profile',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text(
+              'History',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text(
+              'History',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.message),
+            title: const Text(
+              'Inbox',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.contact_support_rounded),
+            title: const Text(
+              'FAQ',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.contact_support_rounded),
+            title: const Text(
+              'Logout',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  FloatingActionButton _buildFloatingButton({
+    required BuildContext context,
+  }) {
+    return FloatingActionButton(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+              height: 200,
+              width: Get.width,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 20,
+              ),
+              decoration: BoxDecoration(
+                color: Color(0xff22272B),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+              ),
+              child: Column(
+                children: [
+                  const Text(
+                    "Today’s Summary",
+                    style: TextStyle(
+                      fontSize: 23,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 35),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Today's Total Trip",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Row(
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.car,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "10 Trips",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      const Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Today's Total Trip",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Row(
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.wallet,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "₦5,456.00",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+      backgroundColor: AppColors.primaryColor,
+      child: Image.asset(
+        "assets/images/float.png",
+        width: 25,
       ),
     );
   }
@@ -460,7 +568,6 @@ class ListCardWidget extends StatelessWidget {
     );
   }
 }
-
 
 class EmptyListWidget extends StatelessWidget {
   const EmptyListWidget({

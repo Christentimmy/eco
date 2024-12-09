@@ -64,24 +64,6 @@ class CreateProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: Container(
-        height: 90,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-          ),
-          color: Color.fromARGB(255, 22, 22, 22),
-        ),
-        child: CommonButton(
-          text: "Continue",
-          ontap: () {
-            Get.to(() => BankDetailsScreen());
-          },
-        ),
-      ),
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text(
@@ -102,142 +84,165 @@ class CreateProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            Center(
-              child: Stack(
-                children: [
-                  Container(
-                    height: 110,
-                    width: 110,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(85),
-                      border: Border.all(
-                        width: 3,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    child: Obx(
-                      () => ClipRRect(
-                        borderRadius: BorderRadius.circular(80),
-                        child: _image.value != null
-                            ? Image.memory(
-                                _image.value!,
-                                fit: BoxFit.cover,
-                              )
-                            : SvgPicture.asset(
-                                "assets/images/placeholder.svg",
-                              ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 5,
-                    bottom: 5,
-                    child: CircleAvatar(
-                      radius: 17,
-                      backgroundColor: Colors.grey,
-                      child: IconButton(
-                        onPressed: () {
-                          pickImage();
-                        },
-                        icon: Icon(
-                          Icons.camera,
-                          size: 17,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: Get.height * 0.05),
-            CustomTextField(
-              hintText: "First Name",
-              textController: _firstNameController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Last Name",
-              textController: _lastNameController,
-            ),
-            const SizedBox(height: 15),
-            Obx(
-              () => CustomTextField(
-                hintText: _selectedDate.value != null
-                    ? DateFormat("MMM dd yyyy").format(_selectedDate.value!)
-                    : "Date of birth",
-                suffixIcon: Icons.calendar_month,
-                textController: _dobController,
-                onSuffixClick: () {
-                  selectDateOfBirth(context);
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              _buildPlaceHolderAndImage(),
+              SizedBox(height: Get.height * 0.05),
+              _buildTextFields(context),
+              const SizedBox(height: 30),
+              CommonButton(
+                text: "Continue",
+                ontap: () {
+                  Get.to(() => BankDetailsScreen());
                 },
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Form _buildTextFields(BuildContext context) {
+    return Form(
+      child: Column(
+        children: [
+          CustomTextField(
+            hintText: "First Name",
+            textController: _firstNameController,
+          ),
+          const SizedBox(height: 15),
+          CustomTextField(
+            hintText: "Last Name",
+            textController: _lastNameController,
+          ),
+          const SizedBox(height: 15),
+          Obx(
+            () => CustomTextField(
+              hintText: _selectedDate.value != null
+                  ? DateFormat("MMM dd yyyy").format(_selectedDate.value!)
+                  : "Date of birth",
+              suffixIcon: Icons.calendar_month,
+              textController: _dobController,
+              onSuffixClick: () {
+                selectDateOfBirth(context);
+              },
             ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Email",
-              suffixIcon: Icons.email,
-              textController: _emailController,
-            ),
-            const SizedBox(height: 15),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  width: 2,
-                  color: Colors.grey,
-                ),
+          ),
+          const SizedBox(height: 15),
+          CustomTextField(
+            hintText: "Email",
+            suffixIcon: Icons.email,
+            textController: _emailController,
+          ),
+          const SizedBox(height: 15),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                width: 2,
+                color: Colors.grey,
               ),
-              child: Row(
-                children: [
-                  CountryCodePicker(
-                    onChanged: (value) {
-                      print(value);
-                    },
-                    initialSelection: '+234',
-                    textStyle: const TextStyle(color: Colors.white),
-                    barrierColor: Colors.transparent,
-                    showCountryOnly: false,
-                    showOnlyCountryWhenClosed: false,
-                    // optional. aligns the flag and the Text left
-                    alignLeft: false,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: "Mobile number",
-                        hintStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
+            ),
+            child: Row(
+              children: [
+                CountryCodePicker(
+                  onChanged: (value) {
+                    debugPrint(value.toString());
+                  },
+                  initialSelection: '+234',
+                  textStyle: const TextStyle(color: Colors.white),
+                  barrierColor: Colors.transparent,
+                  showCountryOnly: false,
+                  showOnlyCountryWhenClosed: false,
+                  // optional. aligns the flag and the Text left
+                  alignLeft: false,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "Mobile number",
+                      hintStyle: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 15),
+          CustomTextField(
+            hintText: "Home Address",
+            suffixIcon: Icons.location_on,
+            textController: _homeAddressController,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Center _buildPlaceHolderAndImage() {
+    return Center(
+      child: Stack(
+        children: [
+          Container(
+            height: 110,
+            width: 110,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(85),
+              border: Border.all(
+                width: 3,
+                color: AppColors.primaryColor,
               ),
             ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Home Address",
-              suffixIcon: Icons.location_on,
-              textController: _homeAddressController,
+            child: Obx(
+              () => ClipRRect(
+                borderRadius: BorderRadius.circular(80),
+                child: _image.value != null
+                    ? Image.memory(
+                        _image.value!,
+                        fit: BoxFit.cover,
+                      )
+                    : SvgPicture.asset(
+                        "assets/images/placeholder.svg",
+                      ),
+              ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            right: 5,
+            bottom: 5,
+            child: CircleAvatar(
+              radius: 17,
+              backgroundColor: Colors.grey,
+              child: IconButton(
+                onPressed: () {
+                  pickImage();
+                },
+                icon: Icon(
+                  Icons.camera,
+                  size: 17,
+                  color: AppColors.primaryColor,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -264,7 +264,7 @@ class RequestHistoryScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       centerTitle: true,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () => Get.back(),
         icon: Icon(
           Icons.arrow_back,
           color: Colors.white,
@@ -279,5 +279,4 @@ class RequestHistoryScreen extends StatelessWidget {
       ),
     );
   }
-
 }

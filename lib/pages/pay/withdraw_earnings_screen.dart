@@ -11,25 +11,7 @@ class WithdrawEarningsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.black,
-        title: const Text(
-          "Withdraw Earnings",
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -124,6 +106,28 @@ class WithdrawEarningsScreen extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: Colors.black,
+      title: const Text(
+        "Withdraw Earnings",
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      leading: IconButton(
+        onPressed: () => Get.back(),
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
         ),
       ),
     );

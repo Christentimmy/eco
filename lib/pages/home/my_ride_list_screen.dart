@@ -1,5 +1,8 @@
+import 'package:eco/pages/auth/sign_up_screen.dart';
+import 'package:eco/pages/chat/chat_screen.dart';
 import 'package:eco/pages/home/request_history_screen.dart';
-import 'package:eco/pages/settings/profile_screen.dart';
+import 'package:eco/pages/settings/faq_screen.dart';
+import 'package:eco/pages/settings/setting_screen.dart';
 import 'package:eco/resources/color_resources.dart';
 import 'package:eco/pages/booking/list_card_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -228,7 +231,7 @@ class MyRideListScreen extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Get.to(()=> ProfileScreen());
+              Get.to(() => SettingScreen());
             },
           ),
           ListTile(
@@ -240,18 +243,8 @@ class MyRideListScreen extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Get.to(()=> RequestHistoryScreen());
+              Get.to(() => RequestHistoryScreen());
             },
-          ),
-          ListTile(
-            leading: const Icon(Icons.history),
-            title: const Text(
-              'History',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.message),
@@ -261,7 +254,9 @@ class MyRideListScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Get.to(() => ChatScreen());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.contact_support_rounded),
@@ -271,7 +266,9 @@ class MyRideListScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Get.to(() => FaqScreen());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.contact_support_rounded),
@@ -282,7 +279,9 @@ class MyRideListScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Get.offAll(() => SignUpScreen());
+            },
           ),
         ],
       ),

@@ -14,25 +14,7 @@ class WithdrawScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.black,
-        title: const Text(
-          "Withdraw Earnings",
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.white,
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
@@ -107,58 +89,72 @@ class WithdrawScreen extends StatelessWidget {
             CommonButton(
               text: "Withdraw",
               ontap: () {
-                // showDialog(
-                //   context: context,
-                //   builder: (context) {
-                //     return AlertDialog(
-
-                //     );
-                //   },
-                // );
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return Dialog(
-                      backgroundColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 45,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Image.asset(
-                            //   "assets/images/authPic.png",
-                            //   width: 150,
-                            // ),
-                            Lottie.asset(
-                              "assets/images/suc.json",
-                              width: 120,
-                              fit: BoxFit.cover,
-                            ),
-                            const Text(
-                              "Withdraw Successful",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            const CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
+                displayDiaogBox(context);
               },
             ),
           ],
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: Colors.black,
+      title: const Text(
+        "Withdraw Earnings",
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      leading: IconButton(
+        onPressed: () => Get.back(),
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> displayDiaogBox(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 45,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  "assets/images/suc.json",
+                  width: 120,
+                  fit: BoxFit.cover,
+                ),
+                const Text(
+                  "Withdraw Successful",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:eco/resources/color_resources.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RideDetailsScreen extends StatelessWidget {
   const RideDetailsScreen({super.key});
@@ -99,7 +100,7 @@ class RideDetailsScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       centerTitle: true,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () => Get.back(),
         icon: Icon(
           Icons.arrow_back,
           color: Colors.white,

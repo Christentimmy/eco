@@ -17,73 +17,36 @@ class BankDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      bottomSheet: Container(
-        height: 120,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
+      appBar: _buildAppBar(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 15,
           ),
-          color: Color.fromARGB(255, 22, 22, 22),
-        ),
-        child: CommonButton(
-          text: "Next",
-          ontap: () {
-            Get.to(() => PersonalDocumentScreen());
-          },
-        ),
-      ),
-      appBar: AppBar(
-        title: const Text(
-          "Bank Details",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: Get.height / 8.5),
+              _buildTextFieldsForBankDetails(),
+              const SizedBox(height: 25),
+              _buildPolicyText(),
+              SizedBox(height: Get.height * 0.2),
+              CommonButton(
+                text: "Next",
+                ontap: () {
+                  Get.to(() => PersonalDocumentScreen());
+                },
+              ),
+            ],
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 15,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: Get.height / 8.5),
-            CustomTextField(
-              hintText: "Bank Name",
-              textController: _bankNameController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Account Holder Name",
-              textController: _accountHolderController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Account Number",
-              textController: _accountNumberController,
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: "Swift/FSC code",
-              textController: _swiftController,
-            ),
-            const SizedBox(height: 25),
-            Center(
+    );
+  }
+
+  Center _buildPolicyText() {
+    return Center(
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
@@ -109,8 +72,54 @@ class BankDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            )
-          ],
+            );
+  }
+
+  Form _buildTextFieldsForBankDetails() {
+    return Form(
+              child: Column(
+                children: [
+                  CustomTextField(
+                    hintText: "Bank Name",
+                    textController: _bankNameController,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomTextField(
+                    hintText: "Account Holder Name",
+                    textController: _accountHolderController,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomTextField(
+                    hintText: "Account Number",
+                    textController: _accountNumberController,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomTextField(
+                    hintText: "Swift/FSC code",
+                    textController: _swiftController,
+                  ),
+                ],
+              ),
+            );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: const Text(
+        "Bank Details",
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+      backgroundColor: Colors.black,
+      centerTitle: true,
+      leading: IconButton(
+        onPressed: () => Get.back(),
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.white,
         ),
       ),
     );

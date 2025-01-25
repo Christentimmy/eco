@@ -1,9 +1,9 @@
-import 'package:eco/pages/chat/call_screen.dart';
-import 'package:eco/pages/chat/chat_screen.dart';
-import 'package:eco/pages/home/notification_screen.dart';
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/booking/review_screen.dart';
-import 'package:eco/widget/custom_button.dart';
+import 'package:sim/pages/chat/call_screen.dart';
+import 'package:sim/pages/chat/chat_screen.dart';
+import 'package:sim/pages/home/notification_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/booking/review_screen.dart';
+import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';

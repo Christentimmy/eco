@@ -1,4 +1,4 @@
-import 'package:eco/pages/settings/setting_screen.dart';
+import 'package:sim/pages/settings/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

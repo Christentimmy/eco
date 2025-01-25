@@ -1,7 +1,7 @@
-import 'package:eco/pages/home/notification_screen.dart';
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/bottom_navigation_screen.dart';
-import 'package:eco/widget/custom_button.dart';
+import 'package:sim/pages/home/notification_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/bottom_navigation_screen.dart';
+import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:flutter_svg/svg.dart';

@@ -1,7 +1,7 @@
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/settings/license_screen.dart';
-import 'package:eco/pages/settings/privacy_policy_screen.dart';
-import 'package:eco/pages/settings/terms_condition_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/settings/license_screen.dart';
+import 'package:sim/pages/settings/privacy_policy_screen.dart';
+import 'package:sim/pages/settings/terms_condition_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

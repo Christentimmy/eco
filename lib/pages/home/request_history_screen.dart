@@ -1,5 +1,5 @@
-import 'package:eco/pages/home/ride_details_screen.dart';
-import 'package:eco/resources/color_resources.dart';
+import 'package:sim/pages/home/ride_details_screen.dart';
+import 'package:sim/resources/color_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

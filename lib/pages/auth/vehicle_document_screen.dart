@@ -1,6 +1,6 @@
-import 'package:eco/pages/auth/vehicle_document_screen_2.dart';
-import 'package:eco/widget/custom_button.dart';
-import 'package:eco/widget/custom_textfield.dart';
+import 'package:sim/pages/auth/vehicle_document_screen_2.dart';
+import 'package:sim/widget/custom_button.dart';
+import 'package:sim/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

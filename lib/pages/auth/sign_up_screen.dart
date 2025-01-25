@@ -1,8 +1,8 @@
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/bottom_navigation_screen.dart';
-import 'package:eco/pages/auth/password_recovery_screen.dart';
-import 'package:eco/pages/auth/verify_phone_screen.dart';
-import 'package:eco/widget/custom_button.dart';
+import 'package:sim/pages/auth/password_recovery_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/bottom_navigation_screen.dart';
+import 'package:sim/pages/auth/verify_phone_screen.dart';
+import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -32,9 +32,9 @@ class SignUpScreen extends StatelessWidget {
       // physics: NeverScrollableScrollPhysics(),
       child: Center(
         child: Container(
-          height: Get.height * 0.61,
+          height: Get.height * 0.7,
           width: Get.width * 0.92,
-          margin: EdgeInsets.only(top: Get.height * 0.35),
+          margin: EdgeInsets.only(top: Get.height * 0.27),
           padding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 10,
@@ -126,7 +126,7 @@ class SignUpScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
-      child: Container(
+      child: SizedBox(
         height: 400,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +216,7 @@ class SignUpScreen extends StatelessWidget {
         horizontal: 10,
       ),
       child: SizedBox(
-        height: Get.height * 0.51,
+        height: Get.height * 0.56,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -357,25 +357,36 @@ class VectorDiagram extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
+    return Container(
+      color: AppColors.primaryColor,
+      height: Get.height * 0.3,
+      width: Get.width,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Container(
-            height: 400,
-            color: AppColors.primaryColor,
-            width: Get.width,
+          Align(
             alignment: Alignment.bottomCenter,
-            child: Image.asset("assets/images/Vector.png"),
-          ),
-          Positioned(
-            bottom: 43,
-            right: 60,
             child: Image.asset(
-              "assets/images/ecoLogo.png",
-              width: 250,
-              height: 250,
+              "assets/images/Vector.png",
+              width: Get.width,
+              height: Get.height * 0.25,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: Get.height * 0.05,
+                right: 15,
+              ),
+              child: Image.asset(
+                "assets/images/ecoLogo.png",
+                width: Get.width / 2.0,
+                fit: BoxFit.cover,
+                height: Get.height * 0.1,
+              ),
             ),
           ),
         ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eco/resources/color_resources.dart';
+import 'package:sim/resources/color_resources.dart';
 import 'package:get/get.dart';
 
 class InviteFriendsScreen extends StatelessWidget {

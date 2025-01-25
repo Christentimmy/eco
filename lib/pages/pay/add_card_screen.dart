@@ -1,6 +1,6 @@
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/widget/custom_button.dart';
-import 'package:eco/widget/custom_textfield.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/widget/custom_button.dart';
+import 'package:sim/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

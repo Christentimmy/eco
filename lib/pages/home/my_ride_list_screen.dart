@@ -1,10 +1,10 @@
-import 'package:eco/pages/auth/sign_up_screen.dart';
-import 'package:eco/pages/chat/chat_screen.dart';
-import 'package:eco/pages/home/request_history_screen.dart';
-import 'package:eco/pages/settings/faq_screen.dart';
-import 'package:eco/pages/settings/setting_screen.dart';
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/booking/list_card_details_screen.dart';
+import 'package:sim/pages/auth/sign_up_screen.dart';
+import 'package:sim/pages/chat/chat_screen.dart';
+import 'package:sim/pages/home/request_history_screen.dart';
+import 'package:sim/pages/settings/faq_screen.dart';
+import 'package:sim/pages/settings/setting_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/booking/list_card_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

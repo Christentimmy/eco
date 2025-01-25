@@ -1,6 +1,6 @@
-import 'package:eco/pages/pay/withdraw_screen.dart';
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/pay/add_card_screen.dart';
+import 'package:sim/pages/pay/withdraw_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/pay/add_card_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

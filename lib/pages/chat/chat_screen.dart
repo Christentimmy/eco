@@ -1,5 +1,5 @@
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/chat/chat_menu_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/chat/chat_menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

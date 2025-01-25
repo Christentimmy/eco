@@ -1,11 +1,11 @@
-import 'package:eco/pages/settings/refer_friends_screen.dart';
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/settings/change_password_screen.dart';
-import 'package:eco/pages/settings/date_distance_screen.dart';
-import 'package:eco/pages/settings/faq_screen.dart';
-import 'package:eco/pages/settings/profile_screen.dart';
-import 'package:eco/pages/settings/rule_terms_screen.dart';
-import 'package:eco/pages/settings/vehicle_profile_screen.dart';
+import 'package:sim/pages/settings/refer_friends_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/settings/change_password_screen.dart';
+import 'package:sim/pages/settings/date_distance_screen.dart';
+import 'package:sim/pages/settings/faq_screen.dart';
+import 'package:sim/pages/settings/profile_screen.dart';
+import 'package:sim/pages/settings/rule_terms_screen.dart';
+import 'package:sim/pages/settings/vehicle_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -111,7 +111,8 @@ class SettingScreen extends StatelessWidget {
                     icon: _settingList[index][1],
                     text: _settingList[index][0],
                     onTap: () {
-                      Get.to(() => ProfileScreen());
+                      // Get.to(() => ProfileScreen());
+                      _settingList[index][2].call();
                     },
                   );
                 },

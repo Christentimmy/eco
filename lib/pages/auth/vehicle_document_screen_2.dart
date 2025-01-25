@@ -1,8 +1,8 @@
-import 'package:eco/pages/auth/upload_eac_doc_screen.dart';
-import 'package:eco/resources/color_resources.dart';
-import 'package:eco/pages/auth/personal_document_screen.dart';
-import 'package:eco/pages/auth/set_up_finger_screen.dart';
-import 'package:eco/widget/custom_button.dart';
+import 'package:sim/pages/auth/upload_eac_doc_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/pages/auth/personal_document_screen.dart';
+import 'package:sim/pages/auth/set_up_finger_screen.dart';
+import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

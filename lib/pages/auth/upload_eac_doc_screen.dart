@@ -1,7 +1,6 @@
 import 'dart:typed_data';
-
-import 'package:eco/utils/image_picker.dart';
-import 'package:eco/widget/custom_button.dart';
+import 'package:sim/utils/image_picker.dart';
+import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';

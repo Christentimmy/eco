@@ -1,18 +1,30 @@
-import 'package:sim/pages/auth/password_recovery_screen.dart';
-import 'package:sim/resources/color_resources.dart';
-import 'package:sim/pages/bottom_navigation_screen.dart';
-import 'package:sim/pages/auth/verify_phone_screen.dart';
-import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:sim/controller/auth_controller.dart';
+import 'package:sim/models/user_model.dart';
+import 'package:sim/pages/auth/password_recovery_screen.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/widget/custom_button.dart';
+import 'package:sim/widget/custom_textfield.dart';
+import 'package:sim/widget/loader.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
 
   final RxBool _isLoginWithNumber = true.obs;
   final RxInt _currentPage = 0.obs;
-  // final _textController = TextEditingController();
+  final RxBool _isNumberValidated = false.obs;
+  final _formSignUpKey = GlobalKey<FormState>();
+  final _formLoginUpKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _loginEmailController = TextEditingController();
+  final _loginPhoneNumberController = TextEditingController();
+  final _loginPasswordController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +46,7 @@ class SignUpScreen extends StatelessWidget {
         child: Container(
           height: Get.height * 0.7,
           width: Get.width * 0.92,
-          margin: EdgeInsets.only(top: Get.height * 0.27),
+          margin: EdgeInsets.only(top: Get.height * 0.28),
           padding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 10,
@@ -82,7 +94,7 @@ class SignUpScreen extends StatelessWidget {
       child: Row(
         children: [
           Obx(
-            () => GestureDetector(
+            () => InkWell(
               onTap: () {
                 CrossFadeState.showFirst;
                 _currentPage.value = 0;
@@ -100,7 +112,7 @@ class SignUpScreen extends StatelessWidget {
           ),
           const Spacer(),
           Obx(
-            () => GestureDetector(
+            () => InkWell(
               onTap: () {
                 CrossFadeState.showSecond;
                 _currentPage.value = 1;
@@ -127,84 +139,176 @@ class SignUpScreen extends StatelessWidget {
         horizontal: 10,
       ),
       child: SizedBox(
-        height: 400,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              "Login Into Your Account",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+        height: Get.height * 0.55,
+        child: Form(
+          key: _formLoginUpKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              const Text(
+                "Login Into Your Account",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            const SizedBox(height: 25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Obx(() {
-                  return GestureDetector(
-                    onTap: () {
-                      _isLoginWithNumber.value = !_isLoginWithNumber.value;
-                    },
-                    child: Text(
-                      _isLoginWithNumber.value
-                          ? "Use Email Instead"
-                          : "Change to number",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.bold,
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Obx(() {
+                    return InkWell(
+                      onTap: () {
+                        _isLoginWithNumber.value = !_isLoginWithNumber.value;
+                      },
+                      child: Text(
+                        _isLoginWithNumber.value
+                            ? "Use Email Instead"
+                            : "Change to number",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+              Obx(() {
+                if (_isLoginWithNumber.value) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        width: 1,
+                        color: _isNumberValidated.value
+                            ? Colors.red
+                            : Colors.grey.withOpacity(0.5),
                       ),
                     ),
+                    child: Row(
+                      children: [
+                        CountryCodePicker(
+                          onChanged: (value) {},
+                          initialSelection: '+234',
+                          showCountryOnly: false,
+                          showOnlyCountryWhenClosed: false,
+                          alignLeft: false,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _loginPhoneNumberController,
+                            keyboardType: TextInputType.number,
+                            validator: _isLoginWithNumber.value
+                                ? (value) {
+                                    if (value!.isEmpty) {
+                                      _isNumberValidated.value = true;
+                                      return null;
+                                    }
+                                    _isNumberValidated.value = false;
+                                    return null;
+                                  }
+                                : null,
+                            decoration: const InputDecoration(
+                              hintText: "mobile number",
+                              hintStyle: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
-                }),
-              ],
-            ),
-            Obx(() {
-              if (_isLoginWithNumber.value) {
-                return const PhoneNumberTextField();
-              } else {
-                return const EmailTextField();
-              }
-            }),
-            const SizedBox(height: 10),
-            const PasswordTextField(),
-            const SizedBox(height: 25),
-            CommonButton(
-              ontap: () {
-                Get.to(() => BottomNavigationScreen());
-              },
-              text: "Login",
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () => Get.to(() => const PasswordRecoveryScreen()),
-                  child: const Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                } else {
+                  return CustomTextField(
+                    hintText: "john@email.com",
+                    textController: _loginEmailController,
+                    validator: _isLoginWithNumber.value
+                        ? null
+                        : (value) {
+                            if (value!.isEmpty) {
+                              return "";
+                            }
+                            if (!value.contains("@")) {
+                              return "";
+                            }
+                            return null;
+                          },
+                  );
+                }
+              }),
+              const SizedBox(height: 10),
+              CustomTextField(
+                hintText: "password",
+                textController: _loginPasswordController,
+                obscureText: true,
+              ),
+              const SizedBox(height: 25),
+              Obx(
+                () => CommonButton(
+                  ontap: () async {
+                    if (_authController.isLoading.value) {
+                      return;
+                    }
+                    if (!_formLoginUpKey.currentState!.validate()) {
+                      return;
+                    }
+                    await _authController.loginUser(
+                      identifier: _isLoginWithNumber.value
+                          ? _loginPhoneNumberController.text
+                          : _loginEmailController.text,
+                      password: _loginPasswordController.text,
+                    );
+                  },
+                  child: _authController.isLoading.value
+                      ? const CarLoader()
+                      : const Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () => Get.to(() => PasswordRecoveryScreen()),
+                    child: const Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            const Text(
-              "By clicking start, you agree to our Terms and Conditions",
-              style: TextStyle(
-                fontSize: 9,
+                ],
               ),
-            ),
-            Container(),
-          ],
+              const Spacer(),
+              const Text(
+                "By clicking start, you agree to our Terms and Conditions",
+                style: TextStyle(
+                  fontSize: 9,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -216,83 +320,145 @@ class SignUpScreen extends StatelessWidget {
         horizontal: 10,
       ),
       child: SizedBox(
-        height: Get.height * 0.56,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            const Text(
-              "Create Account",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const EmailTextField(),
-            // CustomTextField(
-            //   hintText: "name@gmail.com",
-            //   textController: _textController,
-            // ),
-            const SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  width: 2,
-                  color: Colors.grey,
+        height: Get.height * 0.55,
+        child: Form(
+          key: _formSignUpKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              const Text(
+                "Create Account",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
                 ),
               ),
-              child: Row(
-                children: [
-                  CountryCodePicker(
-                    onChanged: (value) {},
-                    initialSelection: '+234',
-                    showCountryOnly: false,
-                    showOnlyCountryWhenClosed: false,
-                    // optional. aligns the flag and the Text left
-                    alignLeft: false,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: "mobile number",
-                        hintStyle: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+              const SizedBox(height: 20),
+              // const EmailTextField(),
+              CustomTextField(
+                hintText: "John@email.com",
+                textController: _emailController,
+                validator: (value) {
+                  if (value?.isEmpty == true) {
+                    return "";
+                  }
+                  if (!value!.contains('@')) {
+                    return "";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 10),
+              Obx(
+                () => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 1,
+                      color: _isNumberValidated.value
+                          ? Colors.red
+                          : Colors.grey.withOpacity(0.5),
                     ),
                   ),
-                ],
+                  child: Row(
+                    children: [
+                      CountryCodePicker(
+                        onChanged: (value) {},
+                        initialSelection: '+234',
+                        showCountryOnly: false,
+                        showOnlyCountryWhenClosed: false,
+                        alignLeft: false,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _phoneNumberController,
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value?.isEmpty == true) {
+                              _isNumberValidated.value = true;
+                              return null;
+                            }
+                            _isNumberValidated.value = false;
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            hintText: "mobile number",
+                            hintStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            const PasswordTextField(),
-            const SizedBox(height: 10),
-            const ConfirmPassswordTextField(),
-            const SizedBox(height: 25),
-            CommonButton(
-              ontap: () {
-                Get.to(() => VerifyPhoneNumberScreen());
-              },
-              text: "Sign Up",
-            ),
-            const Spacer(),
-            const Text(
-              "By clicking start, you agree to our Terms and Conditions",
-              style: TextStyle(
-                fontSize: 9,
+              const SizedBox(height: 10),
+              // const PasswordTextField(),
+              CustomTextField(
+                hintText: "password",
+                textController: _passwordController,
+                obscureText: true,
               ),
-            )
-          ],
+              const SizedBox(height: 10),
+              // const ConfirmPassswordTextField(),
+              CustomTextField(
+                hintText: "confirm password",
+                textController: _confirmPasswordController,
+                obscureText: true,
+                validator: (value) {
+                  if (value?.isEmpty == true) {
+                    return " ";
+                  }
+                  if (value != _passwordController.text) {
+                    return "Passwords do not match";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 25),
+              Obx(
+                () => CommonButton(
+                  ontap: () async {
+                    if (!_formSignUpKey.currentState!.validate()) {
+                      return;
+                    }
+                    UserModel userModel = UserModel(
+                      email: _emailController.text,
+                      phoneNumber: _phoneNumberController.text,
+                      password: _passwordController.text,
+                    );
+                    await _authController.signUpUSer(userModel: userModel);
+                  },
+                  child: _authController.isLoading.value
+                      ? const CarLoader()
+                      : const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
+              ),
+              const Spacer(),
+              const Text(
+                "By clicking start, you agree to our Terms and Conditions",
+                style: TextStyle(
+                  fontSize: 9,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -310,8 +476,8 @@ class PhoneNumberTextField extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          width: 2,
-          color: Colors.grey,
+          width: 1,
+          color: Colors.grey.withOpacity(0.5),
         ),
       ),
       child: Row(
@@ -351,152 +517,33 @@ class PhoneNumberTextField extends StatelessWidget {
 }
 
 class VectorDiagram extends StatelessWidget {
-  const VectorDiagram({
-    super.key,
-  });
+  const VectorDiagram({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.primaryColor,
-      height: Get.height * 0.3,
-      width: Get.width,
+    return SizedBox(
       child: Stack(
-        alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/images/Vector.png",
-              width: Get.width,
-              height: Get.height * 0.25,
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
-            ),
+          Container(
+            height: Get.height * 0.2,
+            color: AppColors.primaryColor,
+            width: Get.width,
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: Get.height * 0.05,
-                right: 15,
-              ),
-              child: Image.asset(
-                "assets/images/ecoLogo.png",
-                width: Get.width / 2.0,
-                fit: BoxFit.cover,
-                height: Get.height * 0.1,
-              ),
+          Image.asset(
+            "assets/images/Vector.png",
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: Get.height * 0.08,
+              left: Get.height * 0.08,
+            ),
+            child: Image.asset(
+              "assets/images/ecoLogo.png",
+              width: Get.width * 0.6,
+              height: Get.height * 0.25,
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ConfirmPassswordTextField extends StatelessWidget {
-  const ConfirmPassswordTextField({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      obscureText: true,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-      ),
-      decoration: InputDecoration(
-        hintText: "confirm password",
-        hintStyle: const TextStyle(
-          fontSize: 12,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            width: 2,
-            color: Colors.black,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            width: 2,
-            color: Colors.grey,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PasswordTextField extends StatelessWidget {
-  const PasswordTextField({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      obscureText: true,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-      ),
-      decoration: InputDecoration(
-        hintText: "password",
-        hintStyle: const TextStyle(
-          fontSize: 12,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            width: 2,
-            color: Colors.black,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            width: 2,
-            color: Colors.grey,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class EmailTextField extends StatelessWidget {
-  const EmailTextField({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-      ),
-      decoration: InputDecoration(
-        hintText: "name@example.com",
-        hintStyle: const TextStyle(
-          fontSize: 12,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            width: 2,
-            color: Colors.black,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            width: 2,
-            color: Colors.grey,
-          ),
-        ),
       ),
     );
   }

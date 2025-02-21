@@ -1,22 +1,41 @@
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:sim/controller/driver_controller.dart';
+import 'package:sim/models/ride_model.dart';
 import 'package:sim/pages/auth/sign_up_screen.dart';
-import 'package:sim/pages/chat/chat_screen.dart';
 import 'package:sim/pages/home/request_history_screen.dart';
 import 'package:sim/pages/settings/faq_screen.dart';
 import 'package:sim/pages/settings/setting_screen.dart';
 import 'package:sim/resources/color_resources.dart';
-import 'package:sim/pages/booking/list_card_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:sim/widget/custom_button.dart';
 
-class MyRideListScreen extends StatelessWidget {
-  MyRideListScreen({super.key});
+class MyRideListScreen extends StatefulWidget {
+  const MyRideListScreen({super.key});
 
-  final RxBool _isOfflineList = true.obs;
-  final RxBool _isOnlineList = false.obs;
+  @override
+  State<MyRideListScreen> createState() => _MyRideListScreenState();
+}
 
-  final _pageController = Get.put(PageController());
+class _MyRideListScreenState extends State<MyRideListScreen> {
+  final RxString _status = "".obs;
+  final _driverController = Get.find<DriverController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _status.value = _driverController.driverModel.value?.status ?? "";
+    saveUserOneSignalId();
+  }
+
+  void saveUserOneSignalId() async {
+    String? subId = OneSignal.User.pushSubscription.id;
+    if (subId != null) {
+      await _driverController.saveUserOneSignalId(oneSignalId: subId);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +54,6 @@ class MyRideListScreen extends StatelessWidget {
                   builder: (context) => GestureDetector(
                     onTap: () {
                       Scaffold.of(context).openDrawer();
-                      print("Sidebar opened");
                     },
                     child: const CircleAvatar(
                       backgroundColor: Colors.white,
@@ -57,15 +75,10 @@ class MyRideListScreen extends StatelessWidget {
                         Obx(
                           () => GestureDetector(
                             onTap: () {
-                              _isOnlineList.value = false;
-                              if (!_isOfflineList.value) {
-                                _isOfflineList.value = !_isOfflineList.value;
-                                _pageController.animateToPage(
-                                  0,
-                                  duration: const Duration(milliseconds: 450),
-                                  curve: Curves.ease,
-                                );
-                              }
+                              _status.value = "offline";
+                              _driverController.updateDriverStatus(
+                                status: "offline",
+                              );
                             },
                             child: Container(
                               height: 40,
@@ -73,14 +86,16 @@ class MyRideListScreen extends StatelessWidget {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: _isOfflineList.value ? Colors.red : null,
+                                color: _status.value == "offline"
+                                    ? Colors.red
+                                    : null,
                               ),
                               child: Text(
                                 "Offline",
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: _isOfflineList.value
+                                  color: _status.value == "offline"
                                       ? Colors.white
                                       : Colors.black,
                                 ),
@@ -91,15 +106,10 @@ class MyRideListScreen extends StatelessWidget {
                         Obx(
                           () => GestureDetector(
                             onTap: () {
-                              _isOfflineList.value = false;
-                              if (!_isOnlineList.value) {
-                                _isOnlineList.value = !_isOnlineList.value;
-                                _pageController.animateToPage(
-                                  1,
-                                  duration: const Duration(milliseconds: 450),
-                                  curve: Curves.ease,
-                                );
-                              }
+                              _status.value == "available";
+                              _driverController.updateDriverStatus(
+                                status: "available",
+                              );
                             },
                             child: Container(
                               height: 40,
@@ -107,7 +117,7 @@ class MyRideListScreen extends StatelessWidget {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: _isOnlineList.value
+                                color: _status.value == "available" || _status.value == "busy"
                                     ? AppColors.primaryColor
                                     : null,
                               ),
@@ -116,7 +126,7 @@ class MyRideListScreen extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: _isOnlineList.value
+                                  color: _status.value == "available"
                                       ? Colors.white
                                       : Colors.black,
                                 ),
@@ -132,22 +142,34 @@ class MyRideListScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _pageController,
-                children: [
-                  const EmptyListWidget(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: ListView.builder(
-                      itemCount: 15,
-                      itemBuilder: (context, index) {
-                        return const ListCardWidget();
-                      },
+              child: Obx(() {
+                if (_driverController.isloading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (_status.value == "offline") {
+                  return const EmptyListWidget();
+                } else if (_driverController.allRideRequests.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "No requests found",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  )
-                ],
-              ),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: _driverController.allRideRequests.length,
+                    itemBuilder: (context, index) {
+                      Ride ride = _driverController.allRideRequests[index];
+                      return ListCardWidget(ride: ride);
+                    },
+                  );
+                }
+              }),
             ),
           ],
         ),
@@ -255,7 +277,7 @@ class MyRideListScreen extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Get.to(() => ChatScreen());
+              // Get.to(() => ChatScreen());
             },
           ),
           ListTile(
@@ -303,7 +325,7 @@ class MyRideListScreen extends StatelessWidget {
                 horizontal: 15,
                 vertical: 20,
               ),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xff22272B),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
@@ -398,18 +420,18 @@ class MyRideListScreen extends StatelessWidget {
 }
 
 class ListCardWidget extends StatelessWidget {
-  const ListCardWidget({
-    super.key,
-  });
+  final Ride ride;
+  ListCardWidget({super.key, required this.ride});
+
+  final _driverController = Get.find<DriverController>();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const ListCardDetailsScreen());
+        // Get.to(() => const ListCardDetailsScreen());
       },
       child: Container(
-        height: 200,
         width: double.infinity,
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.symmetric(
@@ -424,148 +446,88 @@ class ListCardWidget extends StatelessWidget {
           ),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              minTileHeight: 45,
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(
+                Icons.location_on,
+                color: AppColors.primaryColor,
+              ),
+              horizontalTitleGap: 5,
+              title: const Text(
+                "Pickup Location",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              subtitle: Text(
+                ride.pickupLocation?.address ?? "",
+                style: const TextStyle(
+                  fontSize: 9,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            ListTile(
+              minTileHeight: 45,
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(
+                Icons.location_on,
+                color: AppColors.primaryColor,
+              ),
+              horizontalTitleGap: 5,
+              title: const Text(
+                "Drop Off Location",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              subtitle: Text(
+                ride.dropoffLocation?.address ?? "",
+                style: const TextStyle(
+                  fontSize: 9,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            const Divider(),
             Row(
               children: [
-                Icon(
-                  Icons.location_on,
-                  color: AppColors.primaryColor,
-                ),
-                const SizedBox(width: 10),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Pickup Location",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                SizedBox(
+                  width: Get.width / 2.5,
+                  height: Get.height * 0.06,
+                  child: Obx(
+                    () => CommonButton(
+                      child: _driverController.isAcceptRideLoading.value
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text(
+                              "Accept",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                      ontap: () async {
+                        await _driverController.acceptRideRequest(
+                          rideId: ride.id ?? "",
+                          ride: ride,
+                        );
+                        // Get.to(() => const ListCardDetailsScreen());
+                      },
                     ),
-                    Text(
-                      "B Street 92025, CA - 3:00 to 3:15 PM",
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "₹350",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "400m",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 9,
-                      ),
-                    )
-                  ],
+                  ),
                 )
               ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Icon(
-                  Icons.location_on,
-                  color: AppColors.primaryColor,
-                ),
-                const SizedBox(width: 10),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Drop Off Location",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "SJC, Terminal B",
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                const Text(
-                  "Express",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 9,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            const Divider(color: Colors.white),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: SvgPicture.asset(
-                    "assets/images/placeholder.svg",
-                    width: 40,
-                    height: 40,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Joe Dough",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.star,
-                          color: Colors.yellowAccent,
-                          size: 12,
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          "5 (38)",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                const Spacer(),
-                const Text(
-                  "Just now",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                  ),
-                ),
-              ],
-            ),
+            )
           ],
         ),
       ),
@@ -589,7 +551,8 @@ class EmptyListWidget extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         Text(
-          "Turn your location on",
+          "Turn your location on and\nstatus to online",
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.primaryColor,
             fontSize: 18,

@@ -94,7 +94,7 @@ class ListCardDetailsScreen extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => ChatScreen());
+                  // Get.to(() => ChatScreen());
                 },
                 child: Container(
                   height: 45,
@@ -205,7 +205,7 @@ class ListCardDetailsScreen extends StatelessWidget {
           CommonButton(
             text: "Accept",
             ontap: () {
-              Get.to(() => const ArrivingPickUpScreen());
+              // Get.to(() => const ArrivingPickUpScreen());
             },
           ),
         ],

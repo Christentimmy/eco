@@ -1,14 +1,19 @@
-import 'package:sim/resources/color_resources.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sim/controller/auth_controller.dart';
+import 'package:sim/resources/color_resources.dart';
+import 'package:sim/widget/snack_bar.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  ResetPasswordScreen({super.key});
+  final String email;
+  ResetPasswordScreen({super.key, required this.email});
 
   final RxBool _isObscure = false.obs;
   final _passwordController = TextEditingController();
   final RxString _password = "".obs;
+  final _formKey = GlobalKey<FormState>();
 
   bool containsSpecialCharacter(String password) =>
       password.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'));
@@ -22,6 +27,8 @@ class ResetPasswordScreen extends StatelessWidget {
 
   Color getBarColor(bool conditionMet) =>
       conditionMet ? AppColors.primaryColor : Colors.grey;
+
+  final _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -72,42 +79,65 @@ class ResetPasswordScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Obx(
-                () => TextFormField(
-                  obscureText: _isObscure.value,
-                  controller: _passwordController,
-                  onChanged: (e) {
-                    _password.value = e;
-                  },
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: "password",
-                    prefixIcon: const Icon(Icons.lock, size: 15),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        _isObscure.value = !_isObscure.value;
-                      },
-                      icon: _isObscure.value
-                          ? const Icon(Icons.visibility)
-                          : const Icon(Icons.visibility_off),
+                () => Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value?.isEmpty == true) {
+                        return "";
+                      }
+                      return null;
+                    },
+                    obscureText: _isObscure.value,
+                    controller: _passwordController,
+                    onChanged: (e) {
+                      _password.value = e;
+                    },
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
                     ),
-                    hintStyle: const TextStyle(
-                      color: Color.fromARGB(162, 126, 126, 126),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(
-                        width: 2,
-                        color: Colors.grey,
+                    decoration: InputDecoration(
+                      hintText: "password",
+                      prefixIcon: const Icon(Icons.lock, size: 15),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          _isObscure.value = !_isObscure.value;
+                        },
+                        icon: _isObscure.value
+                            ? const Icon(Icons.visibility)
+                            : const Icon(Icons.visibility_off),
                       ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.primaryColor,
+                      hintStyle: const TextStyle(
+                        color: Color.fromARGB(162, 126, 126, 126),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          width: 2,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          width: 2,
+                          color: Colors.red,
+                        ),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          width: 2,
+                          color: Colors.red,
+                        ),
                       ),
                     ),
                   ),
@@ -227,27 +257,55 @@ class ResetPasswordScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: Get.height / 7.5),
-              GestureDetector(
-                // onTap: () => Get.to(() => ResetPasswordScreen()),
-                child: Container(
-                  height: 45,
-                  width: Get.width / 1.5,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.primaryColor,
-                        const Color.fromARGB(212, 37, 37, 37)
-                      ],
+              Obx(
+                () => InkWell(
+                  onTap: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+                    String password = _passwordController.text;
+                    if (!containsNumber(password)) {
+                      return CustomSnackbar.showErrorSnackBar(
+                          "Password must contain a number");
+                    }
+                    if (!containsSpecialCharacter(password)) {
+                      return CustomSnackbar.showErrorSnackBar(
+                          "Password must contain a special character");
+                    }
+                    if (!isPasswordStrong(password)) {
+                      return CustomSnackbar.showErrorSnackBar(
+                        "Password must strong",
+                      );
+                    }
+                    _authController.forgotPassword(
+                      email: email,
+                      password: password,
+                    );
+                  },
+                  child: Container(
+                    height: 45,
+                    width: Get.width / 1.5,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primaryColor,
+                          const Color.fromARGB(212, 37, 37, 37)
+                        ],
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "Send Link",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    child: _authController.isLoading.value
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            "Proceed",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
               ),

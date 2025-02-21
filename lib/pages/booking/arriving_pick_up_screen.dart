@@ -1,3 +1,4 @@
+import 'package:sim/models/ride_model.dart';
 import 'package:sim/pages/home/notification_screen.dart';
 import 'package:sim/resources/color_resources.dart';
 import 'package:sim/pages/booking/start_trip_screen.dart';
@@ -6,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ArrivingPickUpScreen extends StatelessWidget {
-  const ArrivingPickUpScreen({super.key});
+  final Ride ride;
+  const ArrivingPickUpScreen({super.key, required this.ride});
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +210,7 @@ class ArrivingPickUpScreen extends StatelessWidget {
                     child: CommonButton(
                       text: "Arriving Pick Up",
                       ontap: () {
-                        Get.to(() => const StartTripScreen());
+                        // Get.to(() => const StartTripScreen());
                       },
                     ),
                   ),

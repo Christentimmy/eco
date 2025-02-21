@@ -1,5 +1,8 @@
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:sim/controller/auth_controller.dart';
 import 'package:sim/controller/driver_controller.dart';
+import 'package:sim/controller/socket_controller.dart';
+import 'package:sim/controller/storage_controller.dart';
 import 'package:sim/models/ride_model.dart';
 import 'package:sim/pages/auth/sign_up_screen.dart';
 import 'package:sim/pages/home/request_history_screen.dart';
@@ -117,7 +120,8 @@ class _MyRideListScreenState extends State<MyRideListScreen> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: _status.value == "available" || _status.value == "busy"
+                                color: _status.value == "available" ||
+                                        _status.value == "busy"
                                     ? AppColors.primaryColor
                                     : null,
                               ),
@@ -301,8 +305,15 @@ class _MyRideListScreenState extends State<MyRideListScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {
+            onTap: () async {
+              final storageController = Get.find<StorageController>();
+              final authController = Get.find<AuthController>();
+              final socketService = Get.find<SocketController>();
+              socketService.disconnectSocket();
+              await authController.logout();
+              await storageController.deleteToken();
               Get.offAll(() => SignUpScreen());
+              _driverController.clearUserData();
             },
           ),
         ],

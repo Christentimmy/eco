@@ -1061,6 +1061,8 @@ class DriverController extends GetxController {
     userPaymentList.clear();
     rideFareBreakdownModel.value = null;
     availableDriverList.clear();
+    allRideRequests.clear();
+    driverModel.value = null;
     driverLocation.value = const LatLng(59.9139, 10.7522);
   }
 }

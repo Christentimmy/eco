@@ -1,5 +1,3 @@
-
-
 class Car {
   String? carNumber;
   String? model;
@@ -16,6 +14,17 @@ class Car {
     this.color = '',
     this.capacity = 4,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'car_number': carNumber,
+      'model': model,
+      'manufacturer': manufacturer,
+      'year_of_manufacture': yearOfManufacture,
+      'color': color,
+      'capacity': capacity,
+    };
+  }
 
   factory Car.fromJson(json) {
     return Car(

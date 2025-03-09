@@ -37,11 +37,12 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       drawer: BuildSideBar(),
       appBar: _buildAppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
+          horizontal: 15,
           vertical: 20,
         ),
         child: Column(

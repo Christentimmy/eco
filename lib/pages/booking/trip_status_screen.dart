@@ -224,23 +224,25 @@ class _FindARideScreenState extends State<TripStatusScreen> {
                   color: Colors.white,
                 ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Pickup Location",
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Pickup Location",
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.ride.pickupLocation?.address ?? "",
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
+                      Text(
+                        widget.ride.pickupLocation!.address.toString(),
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),
@@ -252,23 +254,25 @@ class _FindARideScreenState extends State<TripStatusScreen> {
                   color: Colors.white,
                 ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Drop Off Location",
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Drop Off Location",
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.ride.dropoffLocation?.address ?? "",
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
+                      Text(
+                        widget.ride.dropoffLocation?.address ?? "",
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),

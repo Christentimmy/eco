@@ -4,11 +4,63 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:sim/models/car_model.dart';
 import 'package:sim/utils/base_url.dart';
 import 'package:sim/widget/snack_bar.dart';
 
 class DriverService {
   http.Client client = http.Client();
+
+  Future<http.StreamedResponse?> uploadPersonalDoc({
+    required String token,
+    required File imageFile,
+    required String title,
+  }) async {
+    try {
+      var uri = Uri.parse("$baseUrl/user/upload-driver-personal-docs");
+
+      var request = http.MultipartRequest('PATCH', uri)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..headers['Content-Type'] = 'multipart/form-data'
+        ..files.add(
+          await http.MultipartFile.fromPath(
+            title,
+            imageFile.path,
+          ),
+        );
+
+      var response = await request.send().timeout(const Duration(seconds: 60));
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+  
+  Future<http.StreamedResponse?> uploadVehicleDocs({
+    required String token,
+    required File imageFile,
+    required String title,
+  }) async {
+    try {
+      var uri = Uri.parse("$baseUrl/user/upload-vehicle-docs");
+      var request = http.MultipartRequest('PATCH', uri)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..headers['Content-Type'] = 'multipart/form-data'
+        ..files.add(
+          await http.MultipartFile.fromPath(
+            title,
+            imageFile.path,
+          ),
+        );
+
+      var response = await request.send().timeout(const Duration(seconds: 60));
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 
   Future<http.Response?> getDriverStatus({
     required String token,
@@ -748,5 +800,77 @@ class DriverService {
     }
     return null;
   }
+
+  Future<http.Response?> getOnboardingLink({
+    required String token,
+  }) async {
+    try {
+      final url = Uri.parse("$baseUrl/stripe/refresh");
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> getDriverIncome({
+    required String token,
+  }) async {
+    try {
+      final url = Uri.parse("$baseUrl/user/driver-income");
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> registerVehicle({
+    required String token,
+    required Car carModel,
+  }) async {
+    try {
+      final response = await client
+          .patch(Uri.parse("$baseUrl/user/register-car"),
+              headers: {
+                "Authorization": "Bearer $token",
+                "Content-Type": "application/json",
+              },
+              body: jsonEncode(carModel.toJson()))
+          .timeout(const Duration(seconds: 15));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+
 
 }

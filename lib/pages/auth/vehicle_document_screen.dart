@@ -1,18 +1,23 @@
+import 'package:sim/controller/driver_controller.dart';
+import 'package:sim/models/car_model.dart';
 import 'package:sim/pages/auth/vehicle_document_screen_2.dart';
 import 'package:sim/widget/custom_button.dart';
 import 'package:sim/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sim/widget/loader.dart';
 
 class VehicleDocumentScreen extends StatelessWidget {
   VehicleDocumentScreen({super.key});
 
-  final _serviceTypeController = TextEditingController();
-  final _brandController = TextEditingController();
+  final _carNumberController = TextEditingController();
   final _modelController = TextEditingController();
-  final _manufactureController = TextEditingController();
+  final _yearOfManController = TextEditingController();
+  final _manufacturerController = TextEditingController();
   final _numberController = TextEditingController();
   final _colorController = TextEditingController();
+  final _driverController = Get.find<DriverController>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,41 +53,103 @@ class VehicleDocumentScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: Get.height / 12.5),
-              CustomTextField(
-                hintText: "Service Type",
-                textController: _serviceTypeController,
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                hintText: "Brand (Auto Suggestion)",
-                textController: _brandController,
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                hintText: "Model (Auto Suggestion)",
-                textController: _modelController,
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                hintText: "Manufacture (Auto Suggestion)",
-                textController: _manufactureController,
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                hintText: "Number Plate",
-                textController: _numberController,
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                hintText: "Color",
-                textController: _colorController,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      hintText: "Car Number",
+                      textController: _carNumberController,
+                      textStyle: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      hintText: "Model",
+                      textController: _modelController,
+                      textStyle: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      hintText: "Manufacturer",
+                      textController: _manufacturerController,
+                      textStyle: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      hintText: "Year Of Manufacture",
+                      textController: _yearOfManController,
+                      textInputType: TextInputType.number,
+                      textStyle: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      hintText: "Color",
+                      textController: _colorController,
+                      textStyle: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      hintText: "Capacity",
+                      textController: _numberController,
+                      textInputType: TextInputType.number,
+                      textStyle: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 34),
-              CommonButton(
-                text: "Next",
-                ontap: () {
-                  Get.to(() => VehichleDocumentScreen2());
-                },
+              Obx(
+                () => CommonButton(
+                  child: _driverController.isloading.value
+                      ? const CarLoader()
+                      : const Text(
+                          "Next",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                  ontap: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+                    final carModel = Car(
+                      carNumber: _carNumberController.text,
+                      model: _modelController.text,
+                      manufacturer: _manufacturerController.text,
+                      yearOfManufacture: int.parse(_yearOfManController.text),
+                      color: _colorController.text,
+                      capacity: int.parse(_numberController.text),
+                    );
+                    await _driverController.registerVehicle(carModel: carModel);
+                  },
+                ),
               ),
               const SizedBox(height: 34),
             ],

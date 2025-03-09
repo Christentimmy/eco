@@ -1,26 +1,31 @@
-import 'dart:typed_data';
+import 'dart:io';
+import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/utils/image_picker.dart';
 import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:sim/widget/loader.dart';
 
 class UploadEacDocScreen extends StatelessWidget {
   final String title;
+  final bool isVehicleDoc;
   UploadEacDocScreen({
     super.key,
     required this.title,
+    required this.isVehicleDoc,
   });
 
-  final Rxn<Uint8List> _image = Rxn<Uint8List>();
+  final Rxn<File> _image = Rxn<File>();
 
-  void _pickImage() async {
-    final im = await selectImageFromGallery(ImageSource.gallery);
+  void selectImageForUser() async {
+    File? im = await pickImage();
     if (im != null) {
       _image.value = im;
     }
   }
+
+  final _driverController = Get.find<DriverController>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +35,14 @@ class UploadEacDocScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Colors.white,
           ),
         ),
         title: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -60,12 +65,14 @@ class UploadEacDocScreen extends StatelessWidget {
             const SizedBox(height: 20),
             Obx(
               () => GestureDetector(
-                onTap: _pickImage,
+                onTap: () {
+                  selectImageForUser();
+                },
                 child: SizedBox(
                   height: Get.height * 0.6,
                   width: Get.width,
                   child: _image.value != null
-                      ? Image.memory(
+                      ? Image.file(
                           _image.value!,
                           fit: BoxFit.cover,
                           height: Get.height * 0.6,
@@ -83,9 +90,38 @@ class UploadEacDocScreen extends StatelessWidget {
               () => SizedBox(
                 width: Get.width * 0.6,
                 child: CommonButton(
-                  text: _image.value == null ? "Take a photo" : "Upload Photo",
-                  ontap: () {
-                    _pickImage();
+                  child: _driverController.isloading.value
+                      ? const CarLoader()
+                      : Text(
+                          _image.value == null
+                              ? "Take a photo"
+                              : "Upload Photo",
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                  ontap: () async {
+                    String customTitle =
+                        title.toLowerCase().replaceAll(" ", "_");
+                    print(customTitle);
+                    if (_image.value == null) {
+                      selectImageForUser();
+                    } else {
+                      if (isVehicleDoc) {
+                        await _driverController.uploadVehicleDocs(
+                          imageFile: _image.value!,
+                          title: customTitle,
+                        );
+                      } else {
+                        await _driverController.uploadPersonalDoc(
+                          imageFile: _image.value!,
+                          title: customTitle,
+                        );
+                      }
+                      // Upload image to server
+                    }
                   },
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sim/bindings/app_bindings.dart';
 import 'package:sim/controller/onesignal_controller.dart';
 import 'package:sim/pages/splash_screen.dart';
+
+final appLinks = AppLinks();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

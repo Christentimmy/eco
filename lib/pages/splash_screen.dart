@@ -28,10 +28,10 @@ class _SplashScreenState extends State<SplashScreen> {
         Get.off(() => SignUpScreen());
         return;
       }
+      socketController.initializeSocket();
       bool hasNavigated = await driverController.getDriverStatus();
       if (hasNavigated) return;
       await driverController.getCurrentRide();
-      socketController.initializeSocket();
     });
   }
 

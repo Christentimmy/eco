@@ -5,7 +5,7 @@ import 'package:sim/controller/socket_controller.dart';
 import 'package:sim/controller/storage_controller.dart';
 import 'package:sim/models/ride_model.dart';
 import 'package:sim/pages/auth/sign_up_screen.dart';
-import 'package:sim/pages/home/request_history_screen.dart';
+import 'package:sim/pages/home/ride_history_screen.dart';
 import 'package:sim/pages/settings/faq_screen.dart';
 import 'package:sim/pages/settings/setting_screen.dart';
 import 'package:sim/resources/color_resources.dart';
@@ -29,7 +29,7 @@ class _MyRideListScreenState extends State<MyRideListScreen> {
   @override
   void initState() {
     super.initState();
-    _status.value = _driverController.driverModel.value?.status ?? "";
+    _status.value = _driverController.driverModel.value?.status ?? "offline";
     saveUserOneSignalId();
   }
 
@@ -46,136 +46,142 @@ class _MyRideListScreenState extends State<MyRideListScreen> {
       floatingActionButton: _buildFloatingButton(context: context),
       backgroundColor: Colors.black,
       drawer: BuildSideBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            SizedBox(height: Get.height / 10.5),
-            Row(
-              children: [
-                Builder(
-                  builder: (context) => GestureDetector(
-                    onTap: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    child: const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(Icons.menu),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Container(
-                    height: 47,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Obx(
-                          () => GestureDetector(
-                            onTap: () {
-                              _status.value = "offline";
-                              _driverController.updateDriverStatus(
-                                status: "offline",
-                              );
-                            },
-                            child: Container(
-                              height: 40,
-                              width: Get.width / 2.55,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: _status.value == "offline"
-                                    ? Colors.red
-                                    : null,
-                              ),
-                              child: Text(
-                                "Offline",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: _status.value == "offline"
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Obx(
-                          () => GestureDetector(
-                            onTap: () {
-                              _status.value == "available";
-                              _driverController.updateDriverStatus(
-                                status: "available",
-                              );
-                            },
-                            child: Container(
-                              height: 40,
-                              width: Get.width / 2.55,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: _status.value == "available" ||
-                                        _status.value == "busy"
-                                    ? AppColors.primaryColor
-                                    : null,
-                              ),
-                              child: Text(
-                                "Online",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: _status.value == "available"
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: Obx(() {
-                if (_driverController.isloading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (_status.value == "offline") {
-                  return const EmptyListWidget();
-                } else if (_driverController.allRideRequests.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "No requests found",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          return await _driverController.getAllRideRequests();
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              SizedBox(height: Get.height / 10.5),
+              Row(
+                children: [
+                  Builder(
+                    builder: (context) => GestureDetector(
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.menu),
                       ),
                     ),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: _driverController.allRideRequests.length,
-                    itemBuilder: (context, index) {
-                      Ride ride = _driverController.allRideRequests[index];
-                      return ListCardWidget(ride: ride);
-                    },
-                  );
-                }
-              }),
-            ),
-          ],
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Container(
+                      height: 47,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Obx(
+                            () => GestureDetector(
+                              onTap: () {
+                                _status.value = "offline";
+                                _driverController.updateDriverStatus(
+                                  status: "offline",
+                                );
+                              },
+                              child: Container(
+                                height: 40,
+                                width: Get.width / 2.55,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: _status.value == "offline"
+                                      ? Colors.red
+                                      : null,
+                                ),
+                                child: Text(
+                                  "Offline",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: _status.value == "offline"
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Obx(
+                            () => GestureDetector(
+                              onTap: () {
+                                _status.value = "available";
+                                _driverController.updateDriverStatus(
+                                  status: "available",
+                                );
+                              },
+                              child: Container(
+                                height: 40,
+                                width: Get.width / 2.55,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: _status.value == "available" ||
+                                          _status.value == "busy"
+                                      ? AppColors.primaryColor
+                                      : null,
+                                ),
+                                child: Text(
+                                  "Online",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: _status.value == "available"
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: Obx(() {
+                  if (_driverController.isloading.value) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (_status.value == "offline") {
+                    return const EmptyListWidget();
+                  } else if (_driverController.allRideRequests.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "No requests found",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: _driverController.allRideRequests.length,
+                      itemBuilder: (context, index) {
+                        Ride ride = _driverController.allRideRequests[index];
+                        print(ride.status);
+                        return ListCardWidget(ride: ride);
+                      },
+                    );
+                  }
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -309,35 +315,36 @@ class BuildSideBar extends StatelessWidget {
               // crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(90),
-                  child: SvgPicture.asset(
-                    "assets/images/placeholder.svg",
-                    width: 65,
+                CircleAvatar(
+                  radius: 25,
+                  backgroundImage: NetworkImage(
+                    _driverController.userModel.value?.profilePicture ?? "",
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Jonathon Smith",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Obx(
+                      () => Text(
+                        "${_driverController.userModel.value?.firstName} ${_driverController.userModel.value?.lastName}",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.star,
                           color: Colors.yellow,
                         ),
                         Text(
-                          "4.8 (5000)",
-                          style: TextStyle(
+                          "${_driverController.driverModel.value?.reviews?.averageRating ?? 0}(${_driverController.driverModel.value?.reviews?.totalRatings?? 0})",
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 12,
                           ),
@@ -366,7 +373,7 @@ class BuildSideBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.account_circle),
             title: const Text(
-              'Profile',
+              'Settings',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -378,13 +385,17 @@ class BuildSideBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.history),
             title: const Text(
-              'Request History',
+              'Rides',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
             onTap: () {
-              Get.to(() => RequestHistoryScreen());
+              if (Get.currentRoute == "/RideHistoryScreen") {
+                Navigator.pop(context);
+              } else {
+                Get.to(() => const RideHistoryScreen());
+              }
             },
           ),
           ListTile(

@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OneSignalController extends GetxController {
-  RxString userId = "".obs; // Store OneSignal User ID
 
   void initOneSignal() async {
     // OneSignal.Debug.setLogLevel(OSLogLevel.verbose);

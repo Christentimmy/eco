@@ -1,15 +1,17 @@
-import 'dart:typed_data';
-import 'package:country_code_picker/country_code_picker.dart';
+import 'dart:io';
+import 'package:sim/controller/auth_controller.dart';
+import 'package:sim/models/user_model.dart';
 import 'package:sim/resources/color_resources.dart';
-import 'package:sim/pages/auth/bank_details_screen.dart';
 import 'package:sim/utils/image_picker.dart';
 import 'package:sim/widget/custom_button.dart';
 import 'package:sim/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:sim/widget/loader.dart';
+import 'package:sim/widget/snack_bar.dart';
+
 
 class CreateProfileScreen extends StatelessWidget {
   CreateProfileScreen({super.key});
@@ -26,9 +28,9 @@ class CreateProfileScreen extends StatelessWidget {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor, // Customize the primary color
-              onPrimary: Colors.white, // Text color on selected date
-              onSurface: Colors.black, // Default text color
+              primary: AppColors.primaryColor,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
@@ -49,13 +51,14 @@ class CreateProfileScreen extends StatelessWidget {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _homeAddressController = TextEditingController();
-  final _emailController = TextEditingController();
   final _dobController = TextEditingController();
+  final Rxn<File> _image = Rxn<File>();
+  final _fomrKey = GlobalKey<FormState>();
 
-  final Rxn<Uint8List> _image = Rxn<Uint8List>();
+  final _authController = Get.find<AuthController>();
 
-  void pickImage() async {
-    Uint8List? im = await selectImageFromGallery(ImageSource.gallery);
+  void selectImageForUser() async {
+    File? im = await pickImage();
     if (im != null) {
       _image.value = im;
     }
@@ -87,116 +90,89 @@ class CreateProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              _buildPlaceHolderAndImage(),
-              SizedBox(height: Get.height * 0.05),
-              _buildTextFields(context),
-              const SizedBox(height: 30),
-              CommonButton(
-                text: "Continue",
-                ontap: () {
-                  Get.to(() => BankDetailsScreen());
-                },
-              ),
-            ],
+          child: Form(
+            key: _fomrKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                _buildimagePicker(),
+                SizedBox(height: Get.height * 0.05),
+                CustomTextField(
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                  hintText: "First Name",
+                  textController: _firstNameController,
+                ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                  hintText: "Last Name",
+                  textController: _lastNameController,
+                ),
+                const SizedBox(height: 15),
+                Obx(
+                  () => CustomTextField(
+                    validator: (value){
+                      return null;
+                    },
+                    hintStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                    readOnly: true,
+                    hintText: _selectedDate.value != null
+                        ? DateFormat("MMM dd yyyy").format(_selectedDate.value!)
+                        : "Date of birth",
+                    suffixIcon: Icons.calendar_month,
+                    textController: _dobController,
+                    onSuffixClick: () {
+                      selectDateOfBirth(context);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                  hintText: "Home Address",
+                  suffixIcon: Icons.location_on,
+                  textController: _homeAddressController,
+                ),
+                SizedBox(height: Get.height * 0.15),
+                Obx(
+                  () => CommonButton(
+                    child: _authController.isLoading.value
+                        ? const CarLoader()
+                        : const Text(
+                            "Continue",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                    ontap: () async {
+                      await completeUserProfile();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Form _buildTextFields(BuildContext context) {
-    return Form(
-      child: Column(
-        children: [
-          CustomTextField(
-            hintText: "First Name",
-            textController: _firstNameController,
-          ),
-          const SizedBox(height: 15),
-          CustomTextField(
-            hintText: "Last Name",
-            textController: _lastNameController,
-          ),
-          const SizedBox(height: 15),
-          Obx(
-            () => CustomTextField(
-              hintText: _selectedDate.value != null
-                  ? DateFormat("MMM dd yyyy").format(_selectedDate.value!)
-                  : "Date of birth",
-              suffixIcon: Icons.calendar_month,
-              textController: _dobController,
-              onSuffixClick: () {
-                selectDateOfBirth(context);
-              },
-            ),
-          ),
-          const SizedBox(height: 15),
-          CustomTextField(
-            hintText: "Email",
-            suffixIcon: Icons.email,
-            textController: _emailController,
-          ),
-          const SizedBox(height: 15),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-                color: Colors.grey,
-              ),
-            ),
-            child: Row(
-              children: [
-                CountryCodePicker(
-                  onChanged: (value) {
-                    debugPrint(value.toString());
-                  },
-                  initialSelection: '+234',
-                  textStyle: const TextStyle(color: Colors.white),
-                  barrierColor: Colors.transparent,
-                  showCountryOnly: false,
-                  showOnlyCountryWhenClosed: false,
-                  // optional. aligns the flag and the Text left
-                  alignLeft: false,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: "Mobile number",
-                      hintStyle: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 15),
-          CustomTextField(
-            hintText: "Home Address",
-            suffixIcon: Icons.location_on,
-            textController: _homeAddressController,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Center _buildPlaceHolderAndImage() {
+  Center _buildimagePicker() {
     return Center(
       child: Stack(
         children: [
@@ -214,7 +190,7 @@ class CreateProfileScreen extends StatelessWidget {
               () => ClipRRect(
                 borderRadius: BorderRadius.circular(80),
                 child: _image.value != null
-                    ? Image.memory(
+                    ? Image.file(
                         _image.value!,
                         fit: BoxFit.cover,
                       )
@@ -232,7 +208,7 @@ class CreateProfileScreen extends StatelessWidget {
               backgroundColor: Colors.grey,
               child: IconButton(
                 onPressed: () {
-                  pickImage();
+                  selectImageForUser();
                 },
                 icon: Icon(
                   Icons.camera,
@@ -244,6 +220,34 @@ class CreateProfileScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> completeUserProfile() async {
+    if (_authController.isLoading.value) {
+      return;
+    }
+    if (!_fomrKey.currentState!.validate()) {
+      return;
+    }
+    if (_image.value == null) {
+      CustomSnackbar.showErrorSnackBar("Image Required");
+      return;
+    }
+    if (_selectedDate.value == null) {
+      CustomSnackbar.showErrorSnackBar("Date of Birth Required");
+      return;
+    }
+    final userModel = UserModel(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      address: _homeAddressController.text,
+      dob: DateFormat("MMM dd yyyy").format(_selectedDate.value!),
+    );
+    print(_image.value?.lengthSync());
+    await _authController.completeProfileScreen(
+      userModel: userModel,
+      imageFile: _image.value!,
     );
   }
 }

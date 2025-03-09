@@ -2,18 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:sim/controller/socket_controller.dart';
 import 'package:sim/controller/storage_controller.dart';
 import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/models/user_model.dart';
 import 'package:sim/pages/auth/create_profile_screen.dart';
+import 'package:sim/pages/auth/personal_document_screen.dart';
 import 'package:sim/pages/auth/reset_password_screen.dart';
 import 'package:sim/pages/auth/sign_up_screen.dart';
-// import 'package:sim/pages/auth/signup_screen.dart';
 import 'package:sim/pages/auth/verify_phone_screen.dart';
 import 'package:sim/pages/bottom_navigation_screen.dart';
-// import 'package:sim/pages/home/home_screen.dart';
 import 'package:sim/service/auth_service.dart';
-import 'package:sim/utils/url_launcher.dart';
 import 'package:sim/widget/snack_bar.dart';
 
 class AuthController extends GetxController {
@@ -21,10 +21,12 @@ class AuthController extends GetxController {
   final AuthService _authService = AuthService();
   final _storageController = Get.find<StorageController>();
   final _driverController = Get.find<DriverController>();
+  final _socketController = Get.find<SocketController>();
 
-  Future<void> signUpUSer({required UserModel userModel}) async {
+  Future<void> signUpUSer({
+    required UserModel userModel,
+  }) async {
     isLoading.value = true;
-
     try {
       final response = await _authService.signUpUser(userModel: userModel);
       if (response == null) return;
@@ -36,21 +38,19 @@ class AuthController extends GetxController {
       }
       String token = decoded["token"];
       await _storageController.storeToken(token);
-      String url = decoded["onboardingLink"] ?? "";
-      if (url.isNotEmpty) {
-        await launchStripeOnboarding(url);
+      _socketController.initializeSocket();
+      await _driverController.getUserDetails();
+      OneSignal.Notifications.requestPermission(true);
+      String? subId = OneSignal.User.pushSubscription.id;
+      if (subId != null) {
+        await _driverController.saveUserOneSignalId(oneSignalId: subId);
       }
-
-      Get.to(
+      Get.offAll(
         () => VerifyPhoneNumberScreen(
           email: userModel.email,
-          nextScreenMethod: () => Get.offAll(
-            () => CreateProfileScreen(),
-          ),
+          nextScreenMethod: () => Get.offAll(() => CreateProfileScreen()),
         ),
       );
-
-      await _driverController.getUserDetails();
     } catch (e) {
       debugPrint("Error From Auth Controller: ${e.toString()}");
     } finally {
@@ -112,6 +112,7 @@ class AuthController extends GetxController {
   Future<void> completeProfileScreen({
     required UserModel userModel,
     required File imageFile,
+    VoidCallback? nextScreen,
   }) async {
     isLoading.value = true;
     try {
@@ -133,7 +134,11 @@ class AuthController extends GetxController {
         return;
       }
       await _driverController.getUserDetails();
-      Get.offAll(() => BottomNavigationScreen());
+      if (nextScreen != null) {
+        nextScreen();
+        return;
+      }
+      Get.offAll(() => PersonalDocumentScreen());
     } catch (e) {
       debugPrint(e.toString());
     } finally {

@@ -17,6 +17,8 @@ class DriverModel {
   VehicleDocuments? vehicleDocuments;
   double? balance;
   Reviews? reviews;
+  String? oneSignalId;
+  String? verificationStatus;
 
   DriverModel({
     this.id,
@@ -31,6 +33,8 @@ class DriverModel {
     this.vehicleDocuments,
     this.balance,
     this.reviews,
+    this.oneSignalId,
+    this.verificationStatus,
   });
 
   factory DriverModel.fromJson(json) {
@@ -41,21 +45,23 @@ class DriverModel {
       car: json["car"] != null ? Car.fromJson(json['car']) : Car(),
       status: json['status'] ?? "",
       location: LatLng(
-        json['location']['coordinates'][1] ?? 0.0, // Lat
-        json['location']['coordinates'][0] ?? 0.0, // Lng
+        (json['location']['coordinates'][1] as num).toDouble(), // Lat
+        (json['location']['coordinates'][0] as num).toDouble(), // Lng
       ),
       isVerified: json['is_verified'] ?? false,
       isVehicleApproved: json['is_vehicle_approved'] ?? false,
       personalDocuments: json["personal_documents"] != null
-          ? PersonalDocuments.fromJson(json['personal_documents'])
-          : PersonalDocuments(),
+          ? PersonalDocuments.fromJson(json["personal_documents"])
+          : null,
       vehicleDocuments: json["vehicle_documents"] != null
-          ? VehicleDocuments.fromJson(json['vehicle_documents'])
-          : VehicleDocuments(),
+          ? VehicleDocuments.fromJson(json["vehicle_documents"])
+          : null,
       balance: (json['balance'] as num).toDouble(),
       reviews: json["reviews"] != null
           ? Reviews.fromJson(json['reviews'])
           : Reviews(),
+      oneSignalId: json['one_signal_id'] ?? "",
+      verificationStatus: json['verification_status'] ?? "",
     );
   }
 }

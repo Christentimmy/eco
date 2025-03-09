@@ -1,13 +1,17 @@
+import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/pages/auth/upload_eac_doc_screen.dart';
+import 'package:sim/pages/home/application_screen.dart';
 import 'package:sim/resources/color_resources.dart';
 import 'package:sim/pages/auth/personal_document_screen.dart';
-import 'package:sim/pages/auth/set_up_finger_screen.dart';
 import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sim/widget/snack_bar.dart';
 
 class VehichleDocumentScreen2 extends StatelessWidget {
-  const VehichleDocumentScreen2({super.key});
+  VehichleDocumentScreen2({super.key});
+
+  final RxBool _isloading = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +28,57 @@ class VehichleDocumentScreen2 extends StatelessWidget {
           ),
           color: Color.fromARGB(255, 22, 22, 22),
         ),
-        child: CommonButton(
-          text: "Next",
-          ontap: () {
-            Get.to(() => const SetUpFingerScreen());
-          },
+        child: Obx(
+          () => CommonButton(
+            child: _isloading.value
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : const Text(
+                    "Next",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+            ontap: () async {
+              _isloading.value = true;
+              final driverController = Get.find<DriverController>();
+              await driverController.getDriverDetails();
+              final vehicle =
+                  driverController.driverModel.value?.vehicleDocuments;
+
+              List<String> missingDocs = [];
+
+              if (vehicle == null) {
+                missingDocs.add("Vehicle documents not found.");
+              } else {
+                if (vehicle.vehicleRegistration?.isEmpty == true) {
+                  missingDocs.add("Vehicle Registration");
+                }
+                if (vehicle.insurancePolicy?.isEmpty == true) {
+                  missingDocs.add("Insurance Policy");
+                }
+                if (vehicle.ownerCertificate?.isEmpty == true) {
+                  missingDocs.add("Owner Certificate");
+                }
+                if (vehicle.puc?.isEmpty == true) {
+                  missingDocs.add("PUC (Pollution Under Control)");
+                }
+              }
+
+              if (missingDocs.isNotEmpty) {
+                CustomSnackbar.showErrorSnackBar(
+                    "Missing Documents: ${missingDocs.join(", ")}");
+                _isloading.value = false;
+                return;
+              }
+
+              _isloading.value = false;
+              Get.offAll(() => ApplicationProcessingScreen());
+            },
+          ),
         ),
       ),
       appBar: AppBar(
@@ -64,7 +114,10 @@ class VehichleDocumentScreen2 extends StatelessWidget {
               secondText: "Vehicle registration",
               ontap: () {
                 Get.to(
-                  () => UploadEacDocScreen(title: "Vehicle registration"),
+                  () => UploadEacDocScreen(
+                    title: "Vehicle registration",
+                    isVehicleDoc: true,
+                  ),
                 );
               },
             ),
@@ -73,7 +126,10 @@ class VehichleDocumentScreen2 extends StatelessWidget {
               secondText: "A driving license is an official Id",
               ontap: () {
                 Get.to(
-                  () => UploadEacDocScreen(title: "INSURANCE POLICY"),
+                  () => UploadEacDocScreen(
+                    title: "INSURANCE POLICY",
+                    isVehicleDoc: true,
+                  ),
                 );
               },
             ),
@@ -82,7 +138,10 @@ class VehichleDocumentScreen2 extends StatelessWidget {
               secondText: "A passport is a travel document",
               ontap: () {
                 Get.to(
-                  () => UploadEacDocScreen(title: "OWNER CERTIFICATE"),
+                  () => UploadEacDocScreen(
+                    title: "OWNER CERTIFICATE",
+                    isVehicleDoc: true,
+                  ),
                 );
               },
             ),
@@ -91,7 +150,10 @@ class VehichleDocumentScreen2 extends StatelessWidget {
               secondText: "Incorrect document type",
               ontap: () {
                 Get.to(
-                  () => UploadEacDocScreen(title: "PUC"),
+                  () => UploadEacDocScreen(
+                    title: "PUC",
+                    isVehicleDoc: true,
+                  ),
                 );
               },
             ),

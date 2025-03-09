@@ -63,43 +63,47 @@ class PersonalDocumentScreen extends StatelessWidget {
                 Get.to(
                   () => UploadEacDocScreen(
                     title: "Birth Certificate",
+                    isVehicleDoc: false,
                   ),
                 );
               },
               firstText: "Birth Certificate",
               secondText: "Vehicle Registration",
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             UploadDocCard(
               ontap: () {
                 Get.to(
                   () => UploadEacDocScreen(
                     title: "Driving License",
+                    isVehicleDoc: false,
                   ),
                 );
               },
               firstText: "Driving License",
               secondText: "A driving license is an official Id",
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             UploadDocCard(
               ontap: () {
                 Get.to(
                   () => UploadEacDocScreen(
                     title: "Passport",
+                    isVehicleDoc: false,
                   ),
                 );
               },
               firstText: "Passport",
               secondText: "A passport is a travel document  ",
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             // CustomTextField(hintText: "Swift/FSC code"),
             UploadDocCard(
               ontap: () {
                 Get.to(
                   () => UploadEacDocScreen(
                     title: "Election Card",
+                    isVehicleDoc: false,
                   ),
                 );
               },
@@ -172,7 +176,7 @@ class UploadDocCard extends StatelessWidget {
           color: Colors.white.withOpacity(0.5),
         ),
       ),
-      trailing: Icon(
+      trailing: const Icon(
         Icons.arrow_forward,
         color: Colors.white,
       ),

@@ -20,4 +20,11 @@ class VehicleDocuments {
       puc: json['puc'] ?? "",
     );
   }
+
+  @override
+  String toString() {
+    return 'VehicleDocuments(vehicleRegistration: $vehicleRegistration, insurancePolicy: $insurancePolicy, ownerCertificate: $ownerCertificate, puc: $puc)';
+  }
+
+
 }

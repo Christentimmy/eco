@@ -1,9 +1,9 @@
 import 'package:sim/pages/home/my_income_screen.dart';
-import 'package:sim/pages/home/my_ratings_screen.dart';
 import 'package:sim/pages/home/my_ride_list_screen.dart';
 import 'package:sim/pages/home/pay_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sim/pages/home/ride_history_screen.dart';
 
 class BottomNavigationScreen extends StatelessWidget {
   BottomNavigationScreen({super.key});
@@ -11,10 +11,10 @@ class BottomNavigationScreen extends StatelessWidget {
   final RxInt _selectedIndex = 0.obs;
 
   final _pages = [
-    MyRideListScreen(),
-    MyIncomeScreen(),
-    MyRatingsScreen(),
-    PayScreen(),
+    const MyRideListScreen(),
+    const MyIncomeScreen(),
+    const RideHistoryScreen(),
+    const PayScreen(),
   ];
 
   @override
@@ -25,7 +25,7 @@ class BottomNavigationScreen extends StatelessWidget {
       bottomNavigationBar: Container(
         margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 5),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 17, 17, 17),
+          color: const Color.fromARGB(255, 17, 17, 17),
           borderRadius: BorderRadius.circular(25),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -37,7 +37,7 @@ class BottomNavigationScreen extends StatelessWidget {
             showUnselectedLabels: false,
             currentIndex: _selectedIndex.value,
             enableFeedback: false,
-            selectedLabelStyle: TextStyle(
+            selectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
@@ -48,19 +48,19 @@ class BottomNavigationScreen extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.list),
-                label: "Ride Lists",
+                label: "",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: "My Income",
+                label: "",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.star),
-                label: "My Ratings",
+                icon: Icon(Icons.drive_eta_outlined),
+                label: "",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.payment),
-                label: "Pay",
+                label: "",
               ),
             ],
           ),

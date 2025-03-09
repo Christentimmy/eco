@@ -6,8 +6,11 @@ import 'package:sim/controller/timer_controller.dart';
 import 'package:sim/resources/color_resources.dart';
 
 class VerifyPhoneNumberScreen extends StatelessWidget {
-  VerifyPhoneNumberScreen(
-      {super.key, this.email, required this.nextScreenMethod});
+  VerifyPhoneNumberScreen({
+    super.key,
+    this.email,
+    required this.nextScreenMethod,
+  });
   final String? email;
   final VoidCallback nextScreenMethod;
   final _timeController = Get.put(TimerController());

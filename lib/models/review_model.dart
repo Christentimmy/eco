@@ -1,7 +1,5 @@
-
-
 class Reviews {
-  int? totalRatings;
+  double? totalRatings;
   double? averageRating;
 
   Reviews({
@@ -11,7 +9,7 @@ class Reviews {
 
   factory Reviews.fromJson(json) {
     return Reviews(
-      totalRatings: json['total_ratings'] ?? 0,
+      totalRatings: (json['total_ratings'] as num?)?.toDouble() ?? 0.0,
       averageRating: (json['average_rating'] as num?)?.toDouble() ?? 0.0,
     );
   }

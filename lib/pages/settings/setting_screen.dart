@@ -1,11 +1,10 @@
+import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/pages/settings/refer_friends_screen.dart';
 import 'package:sim/resources/color_resources.dart';
 import 'package:sim/pages/settings/change_password_screen.dart';
-import 'package:sim/pages/settings/date_distance_screen.dart';
 import 'package:sim/pages/settings/faq_screen.dart';
 import 'package:sim/pages/settings/profile_screen.dart';
 import 'package:sim/pages/settings/rule_terms_screen.dart';
-import 'package:sim/pages/settings/vehicle_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,53 +15,41 @@ class SettingScreen extends StatelessWidget {
     [
       "Profile Settings",
       Icons.account_circle_sharp,
-      (){
-        Get.to(()=> ProfileScreen());
+      () {
+        Get.to(() => ProfileScreen());
       }
     ],
     [
       "Password",
       Icons.lock,
-      (){
-        Get.to(()=> ChangePasswordScreen());
-      }
-    ],
-    [
-      "Vehicle Details",
-      Icons.car_repair_sharp,
-      (){
-        Get.to(()=> VehicleProfileScreen());
+      () {
+        Get.to(() => ChangePasswordScreen());
       }
     ],
     [
       "FAQ",
       Icons.calendar_month_outlined,
-      (){
-        Get.to(()=> FaqScreen());
-      }
-    ],
-    [
-      "Date & Distance",
-      Icons.calendar_month_outlined,
-      (){
-        Get.to(()=> DateAndDistanceScreen());
+      () {
+        Get.to(() => FaqScreen());
       }
     ],
     [
       "Refer Friends",
       Icons.rule_folder_sharp,
-      (){
-        Get.to(()=> ReferFriendsScreen());
+      () {
+        Get.to(() => const ReferFriendsScreen());
       }
     ],
     [
       "Rules & Terms",
       Icons.rule_folder_sharp,
-      (){
-        Get.to(()=> RuleAndTermsScreen());
+      () {
+        Get.to(() => const RuleAndTermsScreen());
       }
     ]
   ];
+
+  final _driverController = Get.find<DriverController>();
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +66,14 @@ class SettingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: Get.height * 0.01),
-              UserPictureWithButton(),
+              Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(
+                    _driverController.userModel.value?.profilePicture ?? "",
+                  ),
+                ),
+              ),
               const SizedBox(height: 10),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -92,19 +86,21 @@ class SettingScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              const Center(
-                child: Text(
-                  "234-7382-7398",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
+              Center(
+                child: Obx(
+                  () => Text(
+                    _driverController.userModel.value?.phoneNumber ?? "",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: _settingList.length,
                 itemBuilder: (context, index) {
                   return CustomListTile(
@@ -123,7 +119,7 @@ class SettingScreen extends StatelessWidget {
                   onTap: () {
                     displayDeleteWidget(context);
                   },
-                  child: Text(
+                  child: const Text(
                     "Delete Account",
                     style: TextStyle(
                       fontSize: 14,
@@ -143,7 +139,7 @@ class SettingScreen extends StatelessWidget {
   Future<dynamic> displayDeleteWidget(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      barrierColor: Color.fromARGB(167, 61, 61, 61),
+      barrierColor: const Color.fromARGB(167, 61, 61, 61),
       builder: (context) {
         return Container(
           height: 370,
@@ -152,7 +148,7 @@ class SettingScreen extends StatelessWidget {
             vertical: 20,
             horizontal: 15,
           ),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15),
@@ -171,7 +167,7 @@ class SettingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              Text(
+              const Text(
                 "All data associated with you account will be\nerased within 48 hours.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -179,7 +175,7 @@ class SettingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              Text(
+              const Text(
                 "If there are any unresolved issues related to\nyour account we can’t delete it.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -198,7 +194,7 @@ class SettingScreen extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Text(
+                child: const Text(
                   "Delete",
                   style: TextStyle(
                     fontSize: 13,
@@ -223,7 +219,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Text(
+                child: const Text(
                   "Cancel",
                   style: TextStyle(
                     fontSize: 13,
@@ -256,49 +252,6 @@ class SettingScreen extends StatelessWidget {
   }
 }
 
-class UserPictureWithButton extends StatelessWidget {
-  const UserPictureWithButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Stack(
-        children: [
-          const CircleAvatar(
-            radius: 50,
-            backgroundImage: AssetImage(
-              "assets/images/avater2.png",
-            ),
-          ),
-          Positioned(
-            bottom: 5,
-            right: 2,
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(
-                  width: 2,
-                  color: Colors.red,
-                ),
-              ),
-              child: const Icon(
-                Icons.edit,
-                color: Colors.black,
-                size: 15,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class CustomListTile extends StatelessWidget {
   final IconData icon;
   final String text;
@@ -320,7 +273,7 @@ class CustomListTile extends StatelessWidget {
       ),
       title: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 13,
           color: Colors.white,
           fontWeight: FontWeight.bold,

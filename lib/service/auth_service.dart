@@ -14,7 +14,7 @@ class AuthService {
     try {
       final response = await client
           .post(
-            Uri.parse("$baseUrl/auth/register"),
+            Uri.parse("$baseUrl/auth/driver/register"),
             body: userModel.toJson(),
           )
           .timeout(const Duration(seconds: 15));
@@ -132,7 +132,7 @@ class AuthService {
           ),
         );
 
-      var response = await request.send().timeout(const Duration(seconds: 15));
+      var response = await request.send().timeout(const Duration(seconds: 60));
       return response;
     } catch (e) {
       debugPrint(e.toString());

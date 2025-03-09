@@ -27,6 +27,8 @@ dependencies:
   onesignal_flutter: ^5.2.9
   socket_io_client: ^3.0.2
   flutter_secure_storage: ^9.2.4
+  geolocator: ^13.0.2
+  app_links: ^6.4.0
 
 dev_dependencies:
   flutter_test:

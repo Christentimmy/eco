@@ -1,18 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sim/controller/location_controller.dart';
 import 'package:sim/controller/storage_controller.dart';
 import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/models/chat_model.dart';
-import 'package:sim/models/driver_model.dart';
-import 'package:sim/models/review_model.dart';
 import 'package:sim/models/ride_model.dart';
 import 'package:sim/pages/booking/start_trip_screen.dart';
-import 'package:sim/pages/booking/trip_details_screen.dart';
-import 'package:sim/pages/booking/trip_payment_screen.dart';
-import 'package:sim/pages/booking/trip_started_screen.dart';
 import 'package:sim/pages/home/application_screen.dart';
 import 'package:sim/pages/splash_screen.dart';
 import 'package:sim/utils/base_url.dart';
@@ -69,10 +63,6 @@ class SocketController extends GetxController with WidgetsBindingObserver {
   }
 
   void listenToEvents() {
-    socket?.on("userDetails", (data) {
-      debugPrint(data.toString());
-    });
-
     socket?.on("applicationStatus", (data) {
       debugPrint(data.toString());
       if (data == "approved") {
@@ -82,82 +72,8 @@ class SocketController extends GetxController with WidgetsBindingObserver {
       }
     });
 
-    socket?.on('driverLocationUpdated', (data) {
-      double lat = double.tryParse(data['lat']) ?? 0.0;
-      double lng = double.tryParse(data['lng']) ?? 0.0;
-      print(data['lat'].runtimeType);
-      LatLng driverLocation = LatLng(lat, lng);
-      print('Driver location updated: $lat, $lng');
-      _driverController.driverLocation.value = driverLocation;
-      _driverController.driverLocation.refresh();
-    });
-
-    socket?.on("tripStatus", (data) {
-      String? message = data?["message"];
-      final rideData = data?["data"]?["ride"];
-      final driverData = data?["data"]?["driver"];
-      if (message == "Driver has accepted your ride") {
-        if (rideData != null && driverData != null) {
-          String roomId = rideData["_id"];
-          print("Room ID: $roomId");
-          DriverModel driver = DriverModel.fromJson(driverData);
-          socket?.emit("joinRoom", {"roomId": roomId});
-          Get.to(() => TripDetailsScreen(driver: driver, rideId: roomId));
-        } else {
-          print("Error: Missing ride or driver data");
-        }
-      }
-      if (message == "Your trip has started") {
-        if (rideData != null) {
-          final ride = Ride.fromJson(rideData);
-          final fromLocation = LatLng(
-            ride.pickupLocation!.lat,
-            ride.pickupLocation!.lng,
-          );
-          final toLocation = LatLng(
-            ride.dropoffLocation!.lat,
-            ride.dropoffLocation!.lng,
-          );
-          Get.to(
-            () => TripStartedScreen(
-              fromLocation: fromLocation,
-              toLocation: toLocation,
-              rideId: ride.id!,
-            ),
-          );
-        } else {
-          print("Error: Missing ride data");
-        }
-      }
-      if (message == "Your trip has been completed") {
-        if (rideData != null && driverData != null) {
-          String rideId = rideData["_id"];
-          DriverModel driver = DriverModel.fromJson(driverData);
-          Get.to(
-            () => TripPaymentScreen(
-              rideId: rideId,
-              driverUserId: driver.userId ?? "",
-              reviews: driver.reviews ?? Reviews(),
-            ),
-          );
-        }
-      }
-    });
-
     socket?.on("rideCancelled", (data) {
       _driverController.getAllRideRequests();
-    });
-
-    socket?.on('schedule-status', (data) {
-      final message = data["message"];
-      _driverController.getUserScheduledRides();
-      if (data.containsKey("driver") &&
-          data["driver"] != null &&
-          message.contains("assigned")) {
-        final driver = DriverModel.fromJson(data["driver"]);
-        String rideId = data["rideId"] ?? "";
-        Get.to(() => TripDetailsScreen(driver: driver, rideId: rideId));
-      }
     });
 
     socket?.on("receiveMessage", (data) {
@@ -179,18 +95,14 @@ class SocketController extends GetxController with WidgetsBindingObserver {
       await _driverController.getAllRideRequests();
     });
 
-    socket?.on("rideCancelled", (data) {
-      _driverController.getAllRideRequests();
-    });
-
     socket?.on("schedule-status", (data) {
       var rideData = data["ride"];
       if (rideData == null || rideData!.containsKey("ride")) {
         return;
       }
       Ride ride = Ride.fromJson(rideData["ride"]);
-      Get.to(() => StartTripScreen(ride: ride));
       _driverController.getAllRideRequests();
+      Get.to(() => StartTripScreen(ride: ride));
     });
 
     socket?.on("stripeOnboardingStatus", (data) {
@@ -201,13 +113,18 @@ class SocketController extends GetxController with WidgetsBindingObserver {
     });
   }
 
+  
   void disConnectListeners() async {
     if (socket != null) {
-      socket?.off("userDetails");
       socket?.off("rideAccepted");
       socket?.off("driverLocationUpdated");
-      socket?.off("tripStatus");
       socket?.off("rideCancelled");
+      socket?.off("applicationStatus");
+      socket?.off("receiveMessage");
+      socket?.off("chat-history");
+      socket?.off("newRideRequest");
+      socket?.off("schedule-status");
+      socket?.off("stripeOnboardingStatus");
     }
   }
 
@@ -216,7 +133,6 @@ class SocketController extends GetxController with WidgetsBindingObserver {
     socket?.disconnect();
     socket = null;
     socket?.close();
-    print('Socket disconnected and deleted');
   }
 
   void sendMessage({
@@ -278,6 +194,8 @@ class SocketController extends GetxController with WidgetsBindingObserver {
       await _driverController.getAllRideRequests();
       if (socket == null || socket?.disconnected == true) {
         initializeSocket();
+        final locationController = Get.find<LocationController>();
+        await locationController.initializeLocation();
       }
     }
   }

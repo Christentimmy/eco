@@ -5,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/models/driver_model.dart';
 import 'package:sim/models/ride_model.dart';
-import 'package:sim/widget/custom_button.dart';
 
 class RideHistoryDetailsScreen extends StatefulWidget {
   final Ride ride;
@@ -382,32 +381,7 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
                         )
                       : const SizedBox.shrink(),
                   const SizedBox(height: 10),
-                  widget.ride.scheduleStatus == "pending"
-                      ? Obx(
-                          () => CommonButton(
-                            ontap: () async {
-                              if (_userController.isloading.value) {
-                                return;
-                              }
-                              await _userController.cancelScheduleRide(
-                                rideId: widget.ride.id ?? '',
-                              );
-                            },
-                            child: _userController.isScheduleLoading.value
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : const Text(
-                                    "Cancel Schedule",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                
                 ],
               ),
             ),

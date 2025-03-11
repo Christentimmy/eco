@@ -5,6 +5,7 @@ import 'package:sim/controller/socket_controller.dart';
 class LocationController extends GetxController {
   Position? lastPosition;
   final int distanceThreshold = 150;
+  final socketController = Get.find<SocketController>();
 
   @override
   void onInit() {
@@ -14,42 +15,52 @@ class LocationController extends GetxController {
 
   Future<void> initializeLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
-    // Fetch the initial location
-    Position initialPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    updateDriverLocation(initialPosition);
 
-    // Start listening to location updates
-    startLocationUpdates();
-  }
+    if (permission == LocationPermission.deniedForever) {
+      print("Location permissions are permanently denied.");
+      return;
+    }
 
-  void startLocationUpdates() {
-    final socketController = Get.find<SocketController>();
-    final socket = socketController.socket;
-    if (socket != null && socket.connected) {
-      Geolocator.getPositionStream(
-        locationSettings: LocationSettings(
-          accuracy: LocationAccuracy.high,
-          distanceFilter: distanceThreshold,
-        ),
-      ).listen((Position position) {
-        updateDriverLocation(position);
-      });
+    try {
+      Position initialPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      updateDriverLocation(initialPosition);
+      startLocationUpdates();
+    } catch (e) {
+      print("Error fetching initial location: $e");
     }
   }
 
+  void startLocationUpdates() {
+    if (socketController.socket == null ||
+        !socketController.socket!.connected) {
+      print("Socket is not connected. Not starting location updates.");
+      return;
+    }
+
+    Geolocator.getPositionStream(
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: distanceThreshold,
+      ),
+    ).listen((Position position) {
+      updateDriverLocation(position);
+    });
+  }
+
   void updateDriverLocation(Position position) {
-    final socketController = Get.find<SocketController>();
-    final socket = socketController.socket;
-    if (socket != null && socket.connected) {
+    if (socketController.socket != null && socketController.socket!.connected) {
       socketController.updateDriverLocation(
         lat: position.latitude,
         lng: position.longitude,
       );
+    } else {
+      print("Socket disconnected, cannot send location updates.");
     }
   }
 }

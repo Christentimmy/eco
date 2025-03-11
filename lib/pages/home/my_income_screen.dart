@@ -207,7 +207,7 @@ class MyIncomeWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "N${paymentModel.amount}",
+                      "N${paymentModel.amount.toStringAsFixed(2)}",
                       style: const TextStyle(
                         fontSize: 15,
                         color: Colors.white,

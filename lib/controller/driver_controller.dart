@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sim/controller/storage_controller.dart';
@@ -11,7 +10,6 @@ import 'package:sim/models/car_model.dart';
 import 'package:sim/models/driver_model.dart';
 import 'package:sim/models/fare_breakdown_model.dart';
 import 'package:sim/models/payment_model.dart';
-import 'package:sim/models/review_model.dart';
 import 'package:sim/models/ride_model.dart';
 import 'package:sim/models/user_model.dart';
 import 'package:sim/pages/auth/create_profile_screen.dart';
@@ -19,10 +17,8 @@ import 'package:sim/pages/auth/sign_up_screen.dart';
 import 'package:sim/pages/auth/vehicle_document_screen.dart';
 import 'package:sim/pages/auth/vehicle_document_screen_2.dart';
 import 'package:sim/pages/auth/verify_phone_screen.dart';
-import 'package:sim/pages/booking/review_screen.dart';
 import 'package:sim/pages/booking/start_trip_screen.dart';
 import 'package:sim/pages/booking/trip_status_screen.dart';
-import 'package:sim/pages/booking/waiting_ride_screen.dart';
 import 'package:sim/pages/bottom_navigation_screen.dart';
 import 'package:sim/pages/home/application_screen.dart';
 import 'package:sim/service/driver_service.dart';
@@ -182,7 +178,6 @@ class DriverController extends GetxController {
       if (response == null) return;
       final decoded = json.decode(response.body);
       String message = decoded["message"] ?? "";
-      print(response.body);
       if (response.statusCode != 200) {
         CustomSnackbar.showErrorSnackBar(message);
         return;
@@ -250,39 +245,6 @@ class DriverController extends GetxController {
     }
   }
 
-  Future<void> getNearByDrivers({
-    required LatLng fromLocation,
-    int? radius,
-  }) async {
-    isloading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-      final response = await _driverService.getNearByDrivers(
-        token: token,
-        fromLocation: fromLocation,
-        radius: radius,
-      );
-      if (response == null) return;
-      final decoded = json.decode(response.body);
-      String message = decoded["message"];
-      if (response.statusCode != 200) {
-        CustomSnackbar.showErrorSnackBar(message);
-        return;
-      }
-      List driversFromResponse = decoded["data"];
-      if (driversFromResponse.isEmpty) return;
-      List<DriverModel> driverModelList =
-          driversFromResponse.map((e) => DriverModel.fromJson(e)).toList();
-      availableDriverList.value = driverModelList;
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isloading.value = false;
-    }
-  }
-
   Future<UserModel?> getUserById({
     required String userId,
   }) async {
@@ -313,55 +275,6 @@ class DriverController extends GetxController {
       isGetUserIdLoading.value = false;
     }
     return null;
-  }
-
-  Future<void> requestRide({
-    required String driverId,
-    required LatLng fromLocation,
-    required String fromLocationName,
-    required LatLng toLocation,
-    required String toLocationName,
-    required String paymentMethod,
-  }) async {
-    isRequestRideLoading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-      final response = await _driverService.requestRide(
-        token: token,
-        driverId: driverId,
-        fromLocation: fromLocation,
-        fromLocationName: fromLocationName,
-        toLocation: toLocation,
-        toLocationName: toLocationName,
-        paymentMethod: paymentMethod,
-      );
-
-      if (response == null) return;
-      final decoded = json.decode(response.body);
-      String message = decoded["message"];
-      if (response.statusCode != 200) {
-        CustomSnackbar.showErrorSnackBar(message);
-        return;
-      }
-      final rideFromResponse = decoded["data"]["ride"];
-      print(rideFromResponse);
-      currentRideModel.value = null;
-      currentRideModel.value = Ride.fromJson(rideFromResponse);
-      print(currentRideModel.value?.id);
-      CustomSnackbar.showSuccessSnackBar("Request sent successfully.");
-      Get.off(
-        () => WaitingRideScreen(
-          fromLoactionName: fromLocationName,
-          toLoactionName: toLocationName,
-        ),
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isRequestRideLoading.value = false;
-    }
   }
 
   Future<void> getUserDetails() async {
@@ -451,38 +364,6 @@ class DriverController extends GetxController {
     }
   }
 
-  Future<void> cancelRideRequest({
-    required String rideId,
-  }) async {
-    isloading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-
-      final response = await _driverService.cancelRideRequest(
-        token: token,
-        rideId: rideId,
-      );
-
-      if (response == null) return;
-      print(response.body);
-      final decoded = json.decode(response.body);
-      String message = decoded["message"];
-      if (response.statusCode != 200) {
-        CustomSnackbar.showErrorSnackBar(message);
-        return;
-      }
-      await fetchRideHistory();
-      await getUserScheduledRides();
-      Get.offAll(() => BottomNavigationScreen());
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isloading.value = false;
-    }
-  }
-
   Future<void> cancelTrip({required String rideId}) async {
     isloading.value = true;
     try {
@@ -505,114 +386,12 @@ class DriverController extends GetxController {
       }
 
       await fetchRideHistory();
-      await getUserScheduledRides();
+      // await getUserScheduledRides();
       Get.to(() => BottomNavigationScreen());
     } catch (e) {
       debugPrint(e.toString());
     } finally {
       isloading.value = false;
-    }
-  }
-
-  Future<void> makePayment({
-    required String rideId,
-    required Reviews reviews,
-    required String driverUserId,
-  }) async {
-    isPaymentProcessing.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) {
-        CustomSnackbar.showErrorSnackBar("Authentication required");
-        return;
-      }
-
-      final response = await _driverService.initiateStripePayment(
-        token: token,
-        rideId: rideId,
-      );
-
-      if (response == null) return;
-      final decoded = json.decode(response.body);
-      if (response.statusCode != 200) {
-        CustomSnackbar.showErrorSnackBar(decoded["message"]);
-        return;
-      }
-
-      String clientSecret = decoded["paymentResult"]["clientSecret"];
-      await _presentStripePaymentSheet(
-        clientSecret: clientSecret,
-        reviews: reviews,
-        driverUserId: driverUserId,
-      );
-      await fetchRideHistory();
-      await getUserScheduledRides();
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isPaymentProcessing.value = false;
-    }
-  }
-
-  Future<void> _presentStripePaymentSheet({
-    required String clientSecret,
-    required Reviews reviews,
-    required String driverUserId,
-  }) async {
-    try {
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: clientSecret,
-          style: ThemeMode.dark,
-          merchantDisplayName: 'SIM',
-        ),
-      );
-      await Stripe.instance.presentPaymentSheet();
-      CustomSnackbar.showSuccessSnackBar("Payment processing!");
-      Get.offAll(
-        () => ReviewScreen(
-          reviews: reviews,
-          driverUserId: driverUserId,
-        ),
-      );
-    } catch (e) {
-      print(e);
-      debugPrint("Stripe Payment Error: $e");
-      CustomSnackbar.showErrorSnackBar("Payment failed");
-    }
-  }
-
-  Future<void> getRideFareBreakDown({
-    required String rideId,
-  }) async {
-    isRideBreakDownLoading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-
-      final response = await _driverService.getRideFareBreakDown(
-        token: token,
-        rideId: rideId,
-      );
-
-      if (response == null) return;
-      final decoded = json.decode(response.body);
-      String message = decoded["message"];
-      if (response.statusCode != 200) {
-        CustomSnackbar.showErrorSnackBar(message);
-        return;
-      }
-      final rideFareBreakdown = decoded["breakdown"];
-      if (rideFareBreakdown == null) return;
-      rideFareBreakdownModel.value = FareBreakdownModel.fromMap(
-        rideFareBreakdown,
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isRideBreakDownLoading.value = false;
     }
   }
 
@@ -657,109 +436,7 @@ class DriverController extends GetxController {
       isEditLoading.value = false;
     }
   }
-
-  Future<void> getUserScheduledRides({String? status}) async {
-    isloading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-
-      final response = await _driverService.getUserScheduledRides(
-        token: token,
-        status: status,
-      );
-
-      if (response == null) return;
-      final decoded = json.decode(response.body);
-      String message = decoded["message"];
-      if (message == "Token has expired.") {
-        Get.offAll(() => SignUpScreen());
-        return;
-      }
-      if (response.statusCode != 200) {
-        debugPrint(message);
-        return;
-      }
-
-      final rides = decoded["data"]["rides"] as List;
-
-      userScheduleList.clear();
-      userScheduleList.value = rides.map((e) => Ride.fromJson(e)).toList();
-      if (response.statusCode == 200) isScheduleFetched.value = true;
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isloading.value = false;
-    }
-  }
-
-  Future<void> scheduleRide({
-    required Map<String, dynamic> rideData,
-  }) async {
-    isScheduleLoading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-
-      final response = await _driverService.scheduleRide(
-        token: token,
-        rideData: rideData,
-      );
-
-      if (response == null) return;
-      final decoded = json.decode(response.body);
-      String message = decoded["message"];
-      if (response.statusCode != 201) {
-        CustomSnackbar.showErrorSnackBar(message);
-        return;
-      }
-      CustomSnackbar.showSuccessSnackBar(message);
-      getUserScheduledRides();
-      await fetchRideHistory();
-
-      Get.offAll(() => BottomNavigationScreen());
-    } catch (e, stackrace) {
-      debugPrint("${e.toString()} $stackrace");
-    } finally {
-      isScheduleLoading.value = false;
-    }
-  }
-
-  Future<void> cancelScheduleRide({
-    required String rideId,
-  }) async {
-    isScheduleLoading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-
-      final response = await _driverService.cancelScheduleRide(
-        token: token,
-        rideId: rideId,
-      );
-
-      if (response == null) return;
-      final decoded = json.decode(response.body);
-      String message = decoded["message"];
-      if (response.statusCode != 200) {
-        CustomSnackbar.showErrorSnackBar(message);
-        return;
-      }
-
-      getUserScheduledRides();
-      await fetchRideHistory();
-
-      Get.offAll(() => BottomNavigationScreen());
-    } catch (e, stackrace) {
-      debugPrint("${e.toString()} $stackrace");
-    } finally {
-      isScheduleLoading.value = false;
-    }
-  }
-
+  
   Future<void> fetchRideHistory({
     String? status,
   }) async {
@@ -805,7 +482,6 @@ class DriverController extends GetxController {
       if (token == null || token.isEmpty) return;
 
       final response = await _driverService.getCurrentRide(token: token);
-      print(response?.body);
       if (response == null) {
         Get.offAll(() => BottomNavigationScreen());
         return;
@@ -841,37 +517,6 @@ class DriverController extends GetxController {
       Get.offAll(() => BottomNavigationScreen());
     } catch (e) {
       debugPrint(e.toString());
-    }
-  }
-
-  Future<void> rateDriver({
-    required String rating,
-    required String rideId,
-  }) async {
-    isloading.value = true;
-    try {
-      final storageController = Get.find<StorageController>();
-      String? token = await storageController.getToken();
-      if (token == null || token.isEmpty) return;
-
-      final response = await _driverService.rateDriver(
-        rating: rating,
-        rideId: rideId,
-        token: token,
-      );
-
-      if (response == null) return;
-      final data = json.decode(response.body);
-      String message = data["message"];
-      if (response.statusCode != 200) {
-        CustomSnackbar.showErrorSnackBar(message);
-        return;
-      }
-      Get.offAll(() => BottomNavigationScreen());
-    } catch (error) {
-      debugPrint(error.toString());
-    } finally {
-      isloading.value = false;
     }
   }
 

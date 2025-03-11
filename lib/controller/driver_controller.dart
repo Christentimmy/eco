@@ -6,6 +6,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sim/controller/storage_controller.dart';
+import 'package:sim/models/bank_account.dart';
 import 'package:sim/models/car_model.dart';
 import 'package:sim/models/driver_model.dart';
 import 'package:sim/models/fare_breakdown_model.dart';
@@ -30,6 +31,7 @@ import 'package:sim/widget/snack_bar.dart';
 
 class DriverController extends GetxController {
   RxBool isloading = false.obs;
+  RxBool isGetRideLoading = false.obs;
   RxBool isStartTripLoading = false.obs;
   RxBool isAcceptRideLoading = false.obs;
   RxBool isScheduleLoading = false.obs;
@@ -40,6 +42,7 @@ class DriverController extends GetxController {
   RxBool isEditLoading = false.obs;
   RxBool isScheduleFetched = false.obs;
   RxBool isPaymentHistoryFetched = false.obs;
+  RxBool isBanksFetched = false.obs;
   var driverLocation = const LatLng(59.9139, 10.7522).obs;
   Rxn<UserModel> userModel = Rxn<UserModel>();
   Rxn<DriverModel> driverModel = Rxn<DriverModel>();
@@ -47,6 +50,7 @@ class DriverController extends GetxController {
   RxList<Ride> userScheduleList = <Ride>[].obs;
   RxList<Ride> allRideRequests = <Ride>[].obs;
   RxList<Ride> rideHistoryList = <Ride>[].obs;
+  RxList<BankModel> allBankList = <BankModel>[].obs;
   RxList<PaymentModel> driverIncomeList = <PaymentModel>[].obs;
   Rxn<FareBreakdownModel> rideFareBreakdownModel = Rxn<FareBreakdownModel>();
   RxBool isGetUserIdLoading = false.obs;
@@ -63,12 +67,14 @@ class DriverController extends GetxController {
     getDriverDetails();
     getAllRideRequests();
     fetchRideHistory();
-    // getUserScheduledRides();
+    getDriverIncome();
+    getAllBankAccounts();
     super.onInit();
   }
 
   Future<void> registerVehicle({
     required Car carModel,
+    required bool isReSubmitting,
   }) async {
     isloading.value = true;
     try {
@@ -86,7 +92,7 @@ class DriverController extends GetxController {
         CustomSnackbar.showErrorSnackBar(message);
         return;
       }
-      Get.to(() => VehichleDocumentScreen2());
+      Get.to(() => VehichleDocumentScreen2(isReSubmitting: isReSubmitting));
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -97,6 +103,8 @@ class DriverController extends GetxController {
   Future<void> uploadPersonalDoc({
     required File imageFile,
     required String title,
+    VoidCallback? resubmitNextScreen,
+    required bool isReSubmitting,
   }) async {
     isloading.value = true;
     try {
@@ -117,7 +125,11 @@ class DriverController extends GetxController {
         CustomSnackbar.showErrorSnackBar(message);
         return;
       }
-      Get.offAll(() => VehicleDocumentScreen());
+      if (resubmitNextScreen != null) {
+        resubmitNextScreen();
+        return;
+      }
+      Get.offAll(() => VehicleDocumentScreen(isReSubmitting: isReSubmitting));
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -390,7 +402,6 @@ class DriverController extends GetxController {
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();
       if (token == null || token.isEmpty) return;
-
       final response = await _driverService.getDriverDetails(token: token);
       if (response == null) return;
       final decoded = json.decode(response.body);
@@ -896,7 +907,7 @@ class DriverController extends GetxController {
   }
 
   Future<void> getAllRideRequests() async {
-    isloading.value = true;
+    isGetRideLoading.value = true;
     try {
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();
@@ -907,21 +918,22 @@ class DriverController extends GetxController {
       );
       if (response == null) return;
       final data = json.decode(response.body);
+      print(data);
       String message = data["message"];
       if (response.statusCode != 200) {
         debugPrint(message);
         return;
       }
       List rides = data["data"];
-      if (rides.isEmpty) return;
       allRideRequests.clear();
+      if (rides.isEmpty) return;
       List<Ride> mapped = rides.map((e) => Ride.fromJson(e)).toList();
       allRideRequests.value = mapped;
       allRideRequests.refresh();
     } catch (e) {
       debugPrint(e.toString());
     } finally {
-      isloading.value = false;
+      isGetRideLoading.value = false;
     }
   }
 
@@ -1093,9 +1105,13 @@ class DriverController extends GetxController {
 
   Future<void> getOnboardinglink() async {
     try {
+      for (int i = 0; i < 200; i++) {
+        print("Get link called");
+      }
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();
       if (token == null || token.isEmpty) return;
+
       final response = await _driverService.getOnboardingLink(token: token);
       if (response == null) return;
       final decoded = json.decode(response.body);
@@ -1104,10 +1120,36 @@ class DriverController extends GetxController {
         debugPrint(message);
         return;
       }
-      String onboardingLink = decoded["data"]["link"] ?? "";
+      String onboardingLink = decoded["link"] ?? "";
+      print(onboardingLink);
       if (onboardingLink.isNotEmpty) {
         await launchStripeOnboarding(onboardingLink);
         return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> getOnboardingStatus() async {
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await _driverService.getonbordingStatus(token: token);
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        debugPrint(message);
+        return;
+      }
+      bool isOnboardingComplete = decoded["isOnboardingComplete"] ?? false;
+
+      if (!isOnboardingComplete) {
+        print(isOnboardingComplete);
+        await getOnboardinglink();
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -1135,6 +1177,7 @@ class DriverController extends GetxController {
       }
 
       List payments = decoded["data"];
+      driverIncomeList.clear();
       if (payments.isEmpty) return;
       driverIncomeList.clear();
       List<PaymentModel> mapped =
@@ -1143,6 +1186,98 @@ class DriverController extends GetxController {
       if (response.statusCode == 200) isPaymentHistoryFetched.value = true;
     } catch (e) {
       debugPrint("❌ Error fetching payments: $e");
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> getAllBankAccounts() async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await _driverService.getAllBankAccounts(token: token);
+
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+
+      if (response.statusCode != 200) {
+        String message = decoded["message"];
+        debugPrint(message);
+        return;
+      }
+
+      List banks = decoded["bankAccounts"];
+      allBankList.clear();
+      if (banks.isEmpty) return;
+      List<BankModel> mapped =
+          banks.map((payment) => BankModel.fromJson(payment)).toList();
+      allBankList.value = mapped;
+      allBankList.refresh();
+      if (response.statusCode == 200) isBanksFetched.value = true;
+    } catch (e) {
+      debugPrint("❌ Error fetching payments: $e");
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> reSubmitApplication() async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+
+      final response = await _driverService.reSubmitApplication(token: token);
+
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"] ?? "";
+      if (response.statusCode != 200) {
+        CustomSnackbar.showErrorSnackBar(message);
+        debugPrint(message);
+        return;
+      }
+
+      CustomSnackbar.showSuccessSnackBar(message);
+      Get.to(() => const ApplicationProcessingScreen());
+    } catch (e) {
+      debugPrint("❌ Error fetching payments: $e");
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> addBankAccount({
+    required String accountHolderName,
+    required String iban,
+    required BuildContext context,
+  }) async {
+    isloading.value = true;
+    try {
+      final storageController = Get.find<StorageController>();
+      String? token = await storageController.getToken();
+      if (token == null || token.isEmpty) return;
+      final response = await _driverService.addBankAccount(
+        accountHolderName: accountHolderName,
+        token: token,
+        iban: iban,
+      );
+      if (response == null) return;
+      final decoded = json.decode(response.body);
+      String message = decoded["message"];
+      if (response.statusCode != 201) {
+        CustomSnackbar.showErrorSnackBar(message);
+        return;
+      }
+      await getAllBankAccounts();
+      CustomSnackbar.showSuccessSnackBar("Bank account added successfully.");
+      Navigator.pop(context);
+    } catch (e) {
+      debugPrint(e.toString());
     } finally {
       isloading.value = false;
     }
@@ -1158,6 +1293,7 @@ class DriverController extends GetxController {
     availableDriverList.clear();
     allRideRequests.clear();
     driverModel.value = null;
+    allBankList.clear();
     driverLocation.value = const LatLng(59.9139, 10.7522);
   }
 }

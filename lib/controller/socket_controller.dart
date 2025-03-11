@@ -9,13 +9,11 @@ import 'package:sim/models/chat_model.dart';
 import 'package:sim/models/driver_model.dart';
 import 'package:sim/models/review_model.dart';
 import 'package:sim/models/ride_model.dart';
-import 'package:sim/pages/auth/create_profile_screen.dart';
-import 'package:sim/pages/auth/verify_phone_screen.dart';
 import 'package:sim/pages/booking/start_trip_screen.dart';
 import 'package:sim/pages/booking/trip_details_screen.dart';
 import 'package:sim/pages/booking/trip_payment_screen.dart';
-// import 'package:sim/pages/booking/trip_payment_screen.dart';
 import 'package:sim/pages/booking/trip_started_screen.dart';
+import 'package:sim/pages/home/application_screen.dart';
 import 'package:sim/pages/splash_screen.dart';
 import 'package:sim/utils/base_url.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -197,12 +195,8 @@ class SocketController extends GetxController with WidgetsBindingObserver {
 
     socket?.on("stripeOnboardingStatus", (data) {
       String message = data["message"];
-      if (message.contains("completed!")) {
-        Get.offAll(
-          () => VerifyPhoneNumberScreen(
-            nextScreenMethod: () => Get.offAll(() => CreateProfileScreen()),
-          ),
-        );
+      if (message.contains("completed")) {
+        Get.offAll(() => const ApplicationProcessingScreen());
       }
     });
   }
@@ -273,16 +267,16 @@ class SocketController extends GetxController with WidgetsBindingObserver {
     required double lat,
     required double lng,
   }) {
-    socket?.emit("updateLocation", {"lat": lat, "lng": lng});
+    if (socket != null && socket!.connected) {
+      socket!.emit("updateLocation", {"lat": lat, "lng": lng});
+    }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       await _driverController.getAllRideRequests();
-      print("📲 App resumed, checking socket connection...");
       if (socket == null || socket?.disconnected == true) {
-        print("🔄 Reconnecting socket...");
         initializeSocket();
       }
     }

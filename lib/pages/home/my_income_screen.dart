@@ -1,5 +1,6 @@
 import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/models/payment_model.dart';
+import 'package:sim/pages/home/my_ride_list_screen.dart';
 import 'package:sim/resources/color_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,7 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      drawer: BuildSideBar(),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.black,
@@ -38,11 +40,15 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.white,
+        leading: Builder(
+          builder: (context) => GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: const Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -103,7 +109,14 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
                   return SizedBox(
                     height: Get.height * 0.7,
                     child: const Center(
-                      child: Text("Empty"),
+                      child: Text(
+                        "Empty",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   );
                 }
@@ -141,7 +154,10 @@ class MyIncomeWidget extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 20,
+        ),
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 15,

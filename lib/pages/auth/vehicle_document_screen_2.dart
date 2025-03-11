@@ -9,8 +9,8 @@ import 'package:get/get.dart';
 import 'package:sim/widget/snack_bar.dart';
 
 class VehichleDocumentScreen2 extends StatelessWidget {
-  VehichleDocumentScreen2({super.key});
-
+  final bool isReSubmitting;
+  VehichleDocumentScreen2({super.key, required this.isReSubmitting});
   final RxBool _isloading = false.obs;
 
   @override
@@ -30,6 +30,49 @@ class VehichleDocumentScreen2 extends StatelessWidget {
         ),
         child: Obx(
           () => CommonButton(
+            ontap: _isloading.value
+                ? () {}
+                : () async {
+                    _isloading.value = true;
+                    final driverController = Get.find<DriverController>();
+                    await driverController.getDriverDetails();
+                    final vehicle =
+                        driverController.driverModel.value?.vehicleDocuments;
+
+                    List<String> missingDocs = [];
+
+                    if (vehicle == null) {
+                      missingDocs.add("Vehicle documents not found.");
+                    } else {
+                      if (vehicle.vehicleRegistration?.isEmpty == true) {
+                        missingDocs.add("Vehicle Registration");
+                      }
+                      if (vehicle.insurancePolicy?.isEmpty == true) {
+                        missingDocs.add("Insurance Policy");
+                      }
+                      if (vehicle.ownerCertificate?.isEmpty == true) {
+                        missingDocs.add("Owner Certificate");
+                      }
+                      if (vehicle.puc?.isEmpty == true) {
+                        missingDocs.add("PUC (Pollution Under Control)");
+                      }
+                    }
+
+                    if (missingDocs.isNotEmpty) {
+                      CustomSnackbar.showErrorSnackBar(
+                          "Missing Documents: ${missingDocs.join(", ")}");
+                      _isloading.value = false;
+                      return;
+                    }
+
+                    _isloading.value = false;
+                    if (isReSubmitting) {
+                      await driverController.reSubmitApplication();
+                      return;
+                    }
+
+                    Get.offAll(() => const ApplicationProcessingScreen());
+                  },
             child: _isloading.value
                 ? const CircularProgressIndicator(
                     color: Colors.white,
@@ -42,42 +85,6 @@ class VehichleDocumentScreen2 extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-            ontap: () async {
-              _isloading.value = true;
-              final driverController = Get.find<DriverController>();
-              await driverController.getDriverDetails();
-              final vehicle =
-                  driverController.driverModel.value?.vehicleDocuments;
-
-              List<String> missingDocs = [];
-
-              if (vehicle == null) {
-                missingDocs.add("Vehicle documents not found.");
-              } else {
-                if (vehicle.vehicleRegistration?.isEmpty == true) {
-                  missingDocs.add("Vehicle Registration");
-                }
-                if (vehicle.insurancePolicy?.isEmpty == true) {
-                  missingDocs.add("Insurance Policy");
-                }
-                if (vehicle.ownerCertificate?.isEmpty == true) {
-                  missingDocs.add("Owner Certificate");
-                }
-                if (vehicle.puc?.isEmpty == true) {
-                  missingDocs.add("PUC (Pollution Under Control)");
-                }
-              }
-
-              if (missingDocs.isNotEmpty) {
-                CustomSnackbar.showErrorSnackBar(
-                    "Missing Documents: ${missingDocs.join(", ")}");
-                _isloading.value = false;
-                return;
-              }
-
-              _isloading.value = false;
-              Get.offAll(() => ApplicationProcessingScreen());
-            },
           ),
         ),
       ),
@@ -117,6 +124,7 @@ class VehichleDocumentScreen2 extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "Vehicle registration",
                     isVehicleDoc: true,
+                    isReSubmitting: isReSubmitting,
                   ),
                 );
               },
@@ -129,6 +137,7 @@ class VehichleDocumentScreen2 extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "INSURANCE POLICY",
                     isVehicleDoc: true,
+                    isReSubmitting: isReSubmitting,
                   ),
                 );
               },
@@ -141,6 +150,7 @@ class VehichleDocumentScreen2 extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "OWNER CERTIFICATE",
                     isVehicleDoc: true,
+                    isReSubmitting: isReSubmitting,
                   ),
                 );
               },
@@ -153,6 +163,7 @@ class VehichleDocumentScreen2 extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "PUC",
                     isVehicleDoc: true,
+                    isReSubmitting: isReSubmitting,
                   ),
                 );
               },

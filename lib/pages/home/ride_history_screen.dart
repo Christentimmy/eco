@@ -37,7 +37,6 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       drawer: BuildSideBar(),
       appBar: _buildAppBar(),
       body: Padding(
@@ -88,6 +87,8 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
 
   AppBar _buildAppBar() {
     return AppBar(
+      backgroundColor: Colors.black,
+      foregroundColor: Colors.white,
       title: const Text(
         "History",
         style: TextStyle(
@@ -164,6 +165,8 @@ class RideHistoryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         elevation: 3,
+        shadowColor: const Color.fromARGB(83, 255, 255, 255),
+        color: const Color(0xff1A1A1A),
         margin: const EdgeInsets.symmetric(
           vertical: 8,
           horizontal: 10,
@@ -228,13 +231,14 @@ class RideHistoryCard extends StatelessWidget {
                       const Icon(
                         Icons.person,
                         size: 18,
-                        color: Colors.black54,
+                        color: Colors.white,
                       ),
                       const SizedBox(width: 6),
                       Text(
                         "${ride.driverFirstName} ${ride.driverLastName}",
                         style: GoogleFonts.poppins(
                           fontSize: 14,
+                          color: Colors.white,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -245,9 +249,12 @@ class RideHistoryCard extends StatelessWidget {
                       const Icon(Icons.star, size: 18, color: Colors.orange),
                       const SizedBox(width: 4),
                       Text(
-                        ride.reviews?.averageRating.toString() ?? "",
+                        ride.reviews?.totalRatings.toString() ?? "",
                         style: GoogleFonts.poppins(
-                            fontSize: 14, fontWeight: FontWeight.w500),
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
@@ -261,7 +268,10 @@ class RideHistoryCard extends StatelessWidget {
                   Text(
                     "\$${ride.fare?.toStringAsFixed(2)}",
                     style: GoogleFonts.poppins(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     convertDateToNormal(ride.requestedAt.toString()),
@@ -309,7 +319,10 @@ class RideHistoryCard extends StatelessWidget {
             child: Text(
               location,
               style: GoogleFonts.poppins(
-                  fontSize: 14, fontWeight: FontWeight.w500),
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ),

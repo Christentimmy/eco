@@ -36,7 +36,7 @@ class DriverService {
     }
     return null;
   }
-  
+
   Future<http.StreamedResponse?> uploadVehicleDocs({
     required String token,
     required File imageFile,
@@ -666,7 +666,7 @@ class DriverService {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
         },
-      );
+      ).timeout(const Duration(seconds: 60));
       return response;
     } on SocketException catch (e) {
       debugPrint("No internet connection $e");
@@ -805,7 +805,7 @@ class DriverService {
     required String token,
   }) async {
     try {
-      final url = Uri.parse("$baseUrl/stripe/refresh");
+      final url = Uri.parse("$baseUrl/user/generate-stripe-onboardinglink");
       final response = await http.get(
         url,
         headers: {
@@ -871,6 +871,105 @@ class DriverService {
     return null;
   }
 
+  Future<http.Response?> getAllBankAccounts({
+    required String token,
+  }) async {
+    try {
+      final url = Uri.parse("$baseUrl/user/get-linked-accounts");
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 
+  Future<http.Response?> getonbordingStatus({
+    required String token,
+  }) async {
+    try {
+      final url = Uri.parse("$baseUrl/user/get-stripe-onboarding-status");
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> reSubmitApplication({
+    required String token,
+  }) async {
+    try {
+      final url = Uri.parse("$baseUrl/user/re-submit-application");
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<http.Response?> addBankAccount({
+    required String accountHolderName,
+    required String iban,
+    required String token,
+  }) async {
+    try {
+      final response = await client
+          .post(
+            Uri.parse("$baseUrl/user/add-bank"),
+            headers: {
+              "Authorization": "Bearer $token",
+              "Content-Type": "application/json",
+            },
+            body: jsonEncode({
+              "account_holder_name": accountHolderName,
+              "iban": iban,
+            }),
+          )
+          .timeout(const Duration(seconds: 60));
+      return response;
+    } on SocketException catch (e) {
+      debugPrint("No internet connection $e");
+    } on TimeoutException {
+      debugPrint("Request timeout");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  
 
 }

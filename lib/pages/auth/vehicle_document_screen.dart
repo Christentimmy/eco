@@ -1,6 +1,5 @@
 import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/models/car_model.dart';
-import 'package:sim/pages/auth/vehicle_document_screen_2.dart';
 import 'package:sim/widget/custom_button.dart';
 import 'package:sim/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:sim/widget/loader.dart';
 
 class VehicleDocumentScreen extends StatelessWidget {
-  VehicleDocumentScreen({super.key});
+  final bool isReSubmitting;
+  VehicleDocumentScreen({super.key, required this.isReSubmitting});
 
   final _carNumberController = TextEditingController();
   final _modelController = TextEditingController();
@@ -124,6 +124,27 @@ class VehicleDocumentScreen extends StatelessWidget {
               const SizedBox(height: 34),
               Obx(
                 () => CommonButton(
+                  ontap: _driverController.isloading.value
+                      ? () {}
+                      : () async {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          final carModel = Car(
+                            carNumber: _carNumberController.text,
+                            model: _modelController.text,
+                            manufacturer: _manufacturerController.text,
+                            yearOfManufacture:
+                                int.parse(_yearOfManController.text),
+                            color: _colorController.text,
+                            capacity: int.parse(_numberController.text),
+                          );
+                          await _driverController.registerVehicle(
+                            carModel: carModel,
+                            isReSubmitting: isReSubmitting,
+                          );
+                        },
                   child: _driverController.isloading.value
                       ? const CarLoader()
                       : const Text(
@@ -134,48 +155,12 @@ class VehicleDocumentScreen extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                  ontap: () async {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    if (!_formKey.currentState!.validate()) {
-                      return;
-                    }
-                    final carModel = Car(
-                      carNumber: _carNumberController.text,
-                      model: _modelController.text,
-                      manufacturer: _manufacturerController.text,
-                      yearOfManufacture: int.parse(_yearOfManController.text),
-                      color: _colorController.text,
-                      capacity: int.parse(_numberController.text),
-                    );
-                    await _driverController.registerVehicle(carModel: carModel);
-                  },
                 ),
               ),
               const SizedBox(height: 34),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Container _buildBottomSheet() {
-    return Container(
-      height: 120,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
-          topLeft: Radius.circular(20),
-        ),
-        color: Color.fromARGB(255, 22, 22, 22),
-      ),
-      child: CommonButton(
-        text: "Next",
-        ontap: () {
-          Get.to(() => VehichleDocumentScreen2());
-        },
       ),
     );
   }

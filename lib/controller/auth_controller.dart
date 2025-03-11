@@ -13,6 +13,7 @@ import 'package:sim/pages/auth/reset_password_screen.dart';
 import 'package:sim/pages/auth/sign_up_screen.dart';
 import 'package:sim/pages/auth/verify_phone_screen.dart';
 import 'package:sim/pages/bottom_navigation_screen.dart';
+import 'package:sim/pages/home/application_screen.dart';
 import 'package:sim/service/auth_service.dart';
 import 'package:sim/widget/snack_bar.dart';
 
@@ -138,7 +139,7 @@ class AuthController extends GetxController {
         nextScreen();
         return;
       }
-      Get.offAll(() => PersonalDocumentScreen());
+      Get.offAll(() => const PersonalDocumentScreen(isReSubmitting: false));
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -161,16 +162,11 @@ class AuthController extends GetxController {
       String message = decoded["message"] ?? "";
       String token = decoded["token"] ?? "";
       final storageController = Get.find<StorageController>();
-
       if (response.statusCode == 404 || response.statusCode == 405) {
         CustomSnackbar.showErrorSnackBar(message);
         return;
       }
-      // if (response.statusCode == 402) {
-      //   CustomSnackbar.showErrorSnackBar(message);
-      //   Get.offAll(() => SignUpScreen());
-      //   return;
-      // }
+      await storageController.storeToken(token);
       if (response.statusCode == 401) {
         CustomSnackbar.showErrorSnackBar(message);
         Get.offAll(
@@ -188,10 +184,14 @@ class AuthController extends GetxController {
       }
       if (response.statusCode == 406) {
         CustomSnackbar.showErrorSnackBar(message);
+        Get.to(() => const ApplicationProcessingScreen());
         return;
       }
-      await storageController.storeToken(token);
       await _driverController.getUserDetails();
+      await _driverController.getDriverIncome();
+      await _driverController.getAllRideRequests();
+      await _driverController.getCurrentRide();
+      await _driverController.fetchRideHistory();
       Get.offAll(() => BottomNavigationScreen());
     } catch (e) {
       debugPrint(e.toString());

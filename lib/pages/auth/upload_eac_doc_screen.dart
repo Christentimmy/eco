@@ -10,10 +10,14 @@ import 'package:sim/widget/loader.dart';
 class UploadEacDocScreen extends StatelessWidget {
   final String title;
   final bool isVehicleDoc;
+  final VoidCallback? resubmitNextScreen;
+  final bool isReSubmitting;
   UploadEacDocScreen({
     super.key,
     required this.title,
     required this.isVehicleDoc,
+    this.resubmitNextScreen,
+    required this.isReSubmitting,
   });
 
   final Rxn<File> _image = Rxn<File>();
@@ -90,6 +94,29 @@ class UploadEacDocScreen extends StatelessWidget {
               () => SizedBox(
                 width: Get.width * 0.6,
                 child: CommonButton(
+                  ontap: _driverController.isloading.value
+                      ? () {}
+                      : () async {
+                          String customTitle =
+                              title.toLowerCase().replaceAll(" ", "_");
+                          if (_image.value == null) {
+                            selectImageForUser();
+                          } else {
+                            if (isVehicleDoc) {
+                              await _driverController.uploadVehicleDocs(
+                                imageFile: _image.value!,
+                                title: customTitle,
+                              );
+                            } else {
+                              await _driverController.uploadPersonalDoc(
+                                imageFile: _image.value!,
+                                title: customTitle,
+                                resubmitNextScreen: resubmitNextScreen,
+                                isReSubmitting: isReSubmitting,
+                              );
+                            }
+                          }
+                        },
                   child: _driverController.isloading.value
                       ? const CarLoader()
                       : Text(
@@ -102,27 +129,6 @@ class UploadEacDocScreen extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                  ontap: () async {
-                    String customTitle =
-                        title.toLowerCase().replaceAll(" ", "_");
-                    print(customTitle);
-                    if (_image.value == null) {
-                      selectImageForUser();
-                    } else {
-                      if (isVehicleDoc) {
-                        await _driverController.uploadVehicleDocs(
-                          imageFile: _image.value!,
-                          title: customTitle,
-                        );
-                      } else {
-                        await _driverController.uploadPersonalDoc(
-                          imageFile: _image.value!,
-                          title: customTitle,
-                        );
-                      }
-                      // Upload image to server
-                    }
-                  },
                 ),
               ),
             ),

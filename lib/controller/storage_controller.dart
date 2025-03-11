@@ -16,10 +16,11 @@ class StorageController extends GetxController {
 
   // Delete token
   Future<void> deleteToken() async {
+    await _secureStorage.delete(key: "one_signal_id");
     await _secureStorage.delete(key: 'userToken');
   }
 
-   /// Save Secret Key
+  /// Save Secret Key
   Future<void> saveSecretKey(String key) async {
     await _secureStorage.write(key: "secretKey", value: key);
   }

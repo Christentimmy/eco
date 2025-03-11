@@ -151,7 +151,7 @@ class _MyRideListScreenState extends State<MyRideListScreen> {
               const SizedBox(height: 10),
               Expanded(
                 child: Obx(() {
-                  if (_driverController.isloading.value) {
+                  if (_driverController.isGetRideLoading.value) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );

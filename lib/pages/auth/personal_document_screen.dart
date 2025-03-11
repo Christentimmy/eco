@@ -1,35 +1,21 @@
 import 'package:sim/pages/auth/upload_eac_doc_screen.dart';
 import 'package:sim/resources/color_resources.dart';
-import 'package:sim/pages/auth/vehicle_document_screen.dart';
-import 'package:sim/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PersonalDocumentScreen extends StatelessWidget {
-  const PersonalDocumentScreen({super.key});
+  final VoidCallback? resubmitNextScreen;
+  final bool isReSubmitting;
+  const PersonalDocumentScreen({
+    super.key,
+    this.resubmitNextScreen,
+    required this.isReSubmitting,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      bottomSheet: Container(
-        height: 120,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-          ),
-          color: Color.fromARGB(255, 22, 22, 22),
-        ),
-        child: CommonButton(
-          text: "Next",
-          ontap: () {
-            Get.to(() => VehicleDocumentScreen());
-          },
-        ),
-      ),
       appBar: AppBar(
         title: const Text(
           "Personal Document",
@@ -64,6 +50,8 @@ class PersonalDocumentScreen extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "Birth Certificate",
                     isVehicleDoc: false,
+                    resubmitNextScreen: resubmitNextScreen,
+                    isReSubmitting: isReSubmitting,
                   ),
                 );
               },
@@ -77,6 +65,7 @@ class PersonalDocumentScreen extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "Driving License",
                     isVehicleDoc: false,
+                     isReSubmitting: isReSubmitting,
                   ),
                 );
               },
@@ -90,6 +79,7 @@ class PersonalDocumentScreen extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "Passport",
                     isVehicleDoc: false,
+                     isReSubmitting: isReSubmitting,
                   ),
                 );
               },
@@ -104,6 +94,7 @@ class PersonalDocumentScreen extends StatelessWidget {
                   () => UploadEacDocScreen(
                     title: "Election Card",
                     isVehicleDoc: false,
+                     isReSubmitting: isReSubmitting,
                   ),
                 );
               },

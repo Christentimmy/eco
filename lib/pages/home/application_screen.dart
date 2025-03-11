@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sim/controller/driver_controller.dart';
 import 'package:sim/controller/socket_controller.dart';
+import 'package:sim/pages/auth/personal_document_screen.dart';
+import 'package:sim/pages/auth/vehicle_document_screen.dart';
 import 'package:sim/resources/color_resources.dart';
 import 'package:sim/widget/custom_button.dart';
 
@@ -16,15 +19,23 @@ class ApplicationProcessingScreen extends StatefulWidget {
 
 class _ApplicationProcessingScreenState
     extends State<ApplicationProcessingScreen> {
-
   final _driverController = Get.find<DriverController>();
   final _socketController = Get.find<SocketController>();
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_)async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       _driverController.getDriverDetails();
       _socketController.initializeSocket();
+      await _driverController.getOnboardingStatus();
+      bool isGranted = OneSignal.Notifications.permission;
+      if (isGranted) {
+        OneSignal.Notifications.requestPermission(true);
+        String? subId = OneSignal.User.pushSubscription.id;
+        if (subId != null) {
+          await _driverController.saveUserOneSignalId(oneSignalId: subId);
+        }
+      }
     });
   }
 
@@ -172,7 +183,19 @@ class _ApplicationProcessingScreenState
                   return Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: CommonButton(
-                      ontap: () async {},
+                      ontap: () async {
+                        Get.to(
+                          () => PersonalDocumentScreen(
+                            isReSubmitting: true,
+                            resubmitNextScreen: () {
+                              Get.to(
+                                () =>
+                                    VehicleDocumentScreen(isReSubmitting: true),
+                              );
+                            },
+                          ),
+                        );
+                      },
                       child: const Text(
                         "Re-submit application",
                         style: TextStyle(

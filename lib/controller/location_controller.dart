@@ -50,7 +50,6 @@ class LocationController extends GetxController {
         lat: position.latitude,
         lng: position.longitude,
       );
-      print("Location Updated: ${position.latitude}, ${position.longitude}");
     }
   }
 }

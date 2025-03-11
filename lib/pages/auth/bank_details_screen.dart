@@ -1,5 +1,4 @@
 import 'package:sim/resources/color_resources.dart';
-import 'package:sim/pages/auth/personal_document_screen.dart';
 import 'package:sim/widget/custom_button.dart';
 import 'package:sim/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class BankDetailsScreen extends StatelessWidget {
               CommonButton(
                 text: "Next",
                 ontap: () {
-                  Get.to(() => PersonalDocumentScreen());
+                  // Get.to(() => PersonalDocumentScreen());
                 },
               ),
             ],

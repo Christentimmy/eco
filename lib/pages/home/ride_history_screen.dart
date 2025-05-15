@@ -39,47 +39,55 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
     return Scaffold(
       drawer: BuildSideBar(),
       appBar: _buildAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 20,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Obx(() {
-                if (_userController.isloading.value) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryColor,
-                    ),
-                  );
-                } else if (_userController.rideHistoryList.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "History is empty",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                } else {
-                  return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: _userController.rideHistoryList.length,
-                    itemBuilder: (context, index) {
-                      Ride ride = _userController.rideHistoryList[index];
-                      return ride.isScheduled == true
-                          ? ScheduleCard(ride: ride)
-                          : RideHistoryCard(ride: ride);
-                    },
-                  );
-                }
-              }),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await _userController.fetchRideHistory(showLoader: false);
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 20,
             ),
-          ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() {
+                  if (_userController.isloading.value) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    );
+                  } else if (_userController.rideHistoryList.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "History is empty",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _userController.rideHistoryList.length,
+                      itemBuilder: (context, index) {
+                        Ride ride = _userController.rideHistoryList[index];
+                        return ride.isScheduled == true
+                            ? ScheduleCard(ride: ride)
+                            : RideHistoryCard(ride: ride);
+                      },
+                    );
+                  }
+                }),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -449,28 +457,28 @@ class ScheduleCard extends StatelessWidget {
     }
   }
 
-  // 📍 Location Row
-  Widget _locationRow(
-    IconData icon,
-    Color iconColor,
-    String location,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        children: [
-          Icon(icon, color: iconColor, size: 18),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              location,
-              style: GoogleFonts.poppins(
-                  fontSize: 14, fontWeight: FontWeight.w500),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // // 📍 Location Row
+  // Widget _locationRow(
+  //   IconData icon,
+  //   Color iconColor,
+  //   String location,
+  // ) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 2),
+  //     child: Row(
+  //       children: [
+  //         Icon(icon, color: iconColor, size: 18),
+  //         const SizedBox(width: 6),
+  //         Expanded(
+  //           child: Text(
+  //             location,
+  //             style: GoogleFonts.poppins(
+  //                 fontSize: 14, fontWeight: FontWeight.w500),
+  //             overflow: TextOverflow.ellipsis,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

@@ -439,9 +439,9 @@ class DriverController extends GetxController {
   
   Future<void> fetchRideHistory({
     String? status,
+    showLoader = true,
   }) async {
-    isloading.value = false;
-    isloading.value = true;
+    showLoader ? isloading.value = true : null;
     try {
       final storageController = Get.find<StorageController>();
       String? token = await storageController.getToken();

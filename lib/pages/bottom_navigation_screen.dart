@@ -4,6 +4,7 @@ import 'package:sim/pages/home/pay_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sim/pages/home/ride_history_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomNavigationScreen extends StatelessWidget {
   BottomNavigationScreen({super.key});
@@ -48,19 +49,22 @@ class BottomNavigationScreen extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.list),
-                label: "",
+                label: "Ride",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: "",
+                icon: Icon(
+                  FontAwesomeIcons.moneyBill,
+                  size: 20,
+                ),
+                label: "My Income",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.drive_eta_outlined),
-                label: "",
+                label: "Ride History",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.payment),
-                label: "",
+                label: "Pay",
               ),
             ],
           ),

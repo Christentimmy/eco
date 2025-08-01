@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () async {
+    Future.delayed(const Duration(seconds: 3), () async {
       final driverController = Get.find<DriverController>();
       final socketController = Get.find<SocketController>();
       final storageController = Get.find<StorageController>();

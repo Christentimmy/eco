@@ -188,6 +188,7 @@ class AuthController extends GetxController {
         return;
       }
       await _driverController.getUserDetails();
+      await _driverController.getDriverDetails();
       await _driverController.getDriverIncome();
       await _driverController.getAllRideRequests();
       await _driverController.getCurrentRide();

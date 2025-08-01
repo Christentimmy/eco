@@ -141,13 +141,12 @@ class _MyIncomeScreenState extends State<MyIncomeScreen> {
 
 class MyIncomeWidget extends StatelessWidget {
   final PaymentModel paymentModel;
-  const MyIncomeWidget({
-    super.key,
-    required this.paymentModel,
-  });
+  const MyIncomeWidget({super.key, required this.paymentModel});
 
   @override
   Widget build(BuildContext context) {
+    String pickupAddress = paymentModel.ride.pickupLocation?.address ?? "";
+    String dropOffAddress = paymentModel.ride.dropoffLocation?.address ?? "";
     return GestureDetector(
       onTap: () {
         // Get.to(() => const MyIncomeWidgetFullDetails());
@@ -191,10 +190,9 @@ class MyIncomeWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      paymentModel.ride.pickupLocation!.address.length > 40
-                          ? paymentModel.ride.pickupLocation!.address
-                              .substring(0, 30)
-                          : paymentModel.ride.pickupLocation!.address,
+                      pickupAddress.length > 40
+                          ? pickupAddress.substring(0, 30)
+                          : pickupAddress,
                       style: const TextStyle(
                         fontSize: 9,
                         color: Colors.grey,
@@ -245,10 +243,9 @@ class MyIncomeWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      paymentModel.ride.dropoffLocation!.address.length > 40
-                          ? paymentModel.ride.dropoffLocation!.address
-                              .substring(0, 30)
-                          : paymentModel.ride.dropoffLocation!.address,
+                      dropOffAddress.length > 40
+                          ? dropOffAddress.substring(0, 30)
+                          : dropOffAddress,
                       style: const TextStyle(
                         fontSize: 9,
                         color: Colors.grey,

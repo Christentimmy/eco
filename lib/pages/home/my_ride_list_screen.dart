@@ -343,7 +343,7 @@ class BuildSideBar extends StatelessWidget {
                           color: Colors.yellow,
                         ),
                         Text(
-                          "${_driverController.driverModel.value?.reviews?.averageRating ?? 0}(${_driverController.driverModel.value?.reviews?.totalRatings?? 0})",
+                          "${_driverController.driverModel.value?.reviews?.averageRating ?? 0}(${_driverController.driverModel.value?.reviews?.totalRatings ?? 0})",
                           style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 12,
@@ -426,8 +426,8 @@ class BuildSideBar extends StatelessWidget {
               socketService.disconnectSocket();
               await authController.logout();
               await storageController.deleteToken();
-              Get.offAll(() => SignUpScreen());
               _driverController.clearUserData();
+              Get.offAll(() => SignUpScreen());
             },
           ),
         ],

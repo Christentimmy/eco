@@ -451,10 +451,12 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              const Text(
-                "By clicking start, you agree to our Terms and Conditions",
-                style: TextStyle(
-                  fontSize: 9,
+              const Center(
+                child: Text(
+                  "By clicking start, you agree to our Terms and Conditions",
+                  style: TextStyle(
+                    fontSize: 9,
+                  ),
                 ),
               )
             ],
